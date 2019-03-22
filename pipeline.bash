@@ -2,12 +2,12 @@
 
 #Usage statement
 usage () {
-	echo "Usage: rename.bash -g <input_gff> -n <input_nucl> -p <input_prot> -o <output_gff>
+	echo "Usage: rename.bash -g <input_gff> -n <input_nucl> -p <input_prot> -o <output_name>
 	Required Arguments:
 	-g name of the input gff file that contains predicted genes
 	-n name of the input fna file that contains predicted genes
 	-p name of the input faa file that contains predicted proteins
-	-o desired name of the annotated output gff file
+	-o desired name of the annotated output files. This will included annotated nucleotide, protein, and gff files.
 	"
 }
 
@@ -36,8 +36,9 @@ get_input() {
 		esac
 	done
 	
-	echo "extension"
-	echo "${gff##*.}"
+	outGff="$out.gff"
+	outNucl="$out.fna"
+	outProt="$out.faa"
 }
 
 check_files() {
@@ -85,10 +86,34 @@ check_files() {
 	
 }
 
+homology() {
+	# Run the homology based tools
+	
+}
+
+ab_initio() {
+	# Run the ab initio based tools
+	
+}
+
+merge() {
+	# Merge the output of the all the tools together into a gff file
+	# Concatenate the output files together
+}
+
+annotate_fast() {
+	# Take the annotations from the gff file and give those annotation to the fasta files
+	# ie the nucleotide sequences and protein sequences
+	
+}
 
 main() {
 	get_input "$@"
 	check_files
+	homology
+	ab_initio
+	merge
+	annotate_fasta
 }
 
 
