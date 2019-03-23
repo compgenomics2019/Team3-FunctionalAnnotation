@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import shutil
+import argparse
+import subprocess
+
+## Global variables that will be defined later
+PHOBIUS_BIN = None
+
+def run_phobius(INPUT, OUTPUT):
+    if not PHOBIUS_BIN:
+        print("phobius program not found, please specify PHOBIUS_BIN" +
+              " environment variable, or put it in PATH")
+        sys.exit()
+    results = subprocess.check_output([PHOBIUS_BIN, '-short', INPUT])
+    results = results.decode("utf-8")
+    results = results.splitlines()
+    # The first line is:
+    #    SEQENCE ID                     TM SP PREDICTION
+    results = results[1:]
+    with open(OUTPUT, "w") as OUTPUT_F:
+        OUTPUT_F.write("ID\tTM\tSP\tPREDICTION\n")
+        for line in results:
+            items = line.split()
+            OUTPUT_F.write("\t".join(items) + "\n")
+
+def parse_args():
+    parser = argparse.ArgumentParser(description='Run phobius program')
+    parser.add_argument('-i', '--input', required=True,
+                        help='Path of a fasta file containing protein sequence')
+    parser.add_argument('-o', '--output', required=True,
+                        help='Path of output file')
+    args = parser.parse_args()
+    return args
+
+def main():
+    ## Parse args
+    args = parse_args()
+    INPUT = args.input
+    OUTPUT = args.output
+
+    ## Get PHOBIUS_BIN
+    global PHOBIUS_BIN
+    PHOBIUS_BIN = shutil.which("phobius.pl")
+    PHOBIUS_BIN = os.getenv('PHOBIUS_BIN', PHOBIUS_BIN)
+    if PHOBIUS_BIN:
+        print("Using {}".format(PHOBIUS_BIN))
+
+    ## Run phobius program
+    run_phobius(INPUT, OUTPUT)
+
+if __name__ == "__main__":
+    main()
