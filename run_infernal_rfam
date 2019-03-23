@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+
+print("""
+    Infernal Software can be obtained from bioconda:
+    > conda install -c bioconda infernal=1.1.2
+""")
