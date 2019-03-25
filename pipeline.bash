@@ -124,6 +124,8 @@ ab_initio() {
 	
 	# SignalP
 	# What is the output?
+	# The prefix argument takes in a user input for name of the output file and appends a .gff3 at the end of the specified name.
+	# Here if the prefix is signalpOut, then the gff file obtained would be signalpOut.gff3
 	signalp -fasta $prot -org $org -format short -gff3 -prefix signalpOut
 }
 
