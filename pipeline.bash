@@ -98,22 +98,26 @@ check_files() {
 homology() {
 	# Run the homology based tools
 	# eggNOG
-	python emapper.py -i $prot --output eggNOG_results -d bact -m diamond
+	python emapper.py -i $prot --output eggNOG_out -d bact -m diamond
 	
 	# CARD
 	conda activate function_annotation
 	rgi load -i $c --card_annotation $m --local
-	rgi main -i $prot -o $o --input_type protein --local
+	rgi main -i $prot -o card_out --input_type protein --local
 	
 	# InterProScan
 	# SWITCHING TO PYTHON3!
 	alias python=python3
-	interproscan.sh -i $prot -o intPro_results -f gff3
+	interproscan.sh -i $prot -o intPro_out -f gff3
 }
 
 ab_initio() {
 	# Run the ab initio based tools
+	# Piler
+	./pilercr.sh -i $assembledGenome -o piler_out
 	
+	# SignalP
+	./signalp.sh -i $prot -o gram+
 }
 
 merge() {
