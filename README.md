@@ -19,3 +19,13 @@
   ./prepare_Rfam.sh
   cd ..
   ```
+
+- Phobius
+
+  To download the phobius program, use the `dependencies/prepare_phobius.sh` script
+
+  ```
+  cd dependencies
+  ./prepare_phobius.sh
+  cd ..
+  ```

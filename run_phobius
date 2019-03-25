@@ -6,14 +6,10 @@ import shutil
 import argparse
 import subprocess
 
-## Global variables that will be defined later
-PHOBIUS_BIN = None
+DIR              = os.path.dirname(__file__)
+PHOBIUS_BIN      = os.path.join(DIR, 'dependencies/phobius/phobius.pl')
 
 def run_phobius(INPUT, OUTPUT):
-    if not PHOBIUS_BIN:
-        print("phobius program not found, please specify PHOBIUS_BIN" +
-              " environment variable, or put it in PATH")
-        sys.exit()
     results = subprocess.check_output([PHOBIUS_BIN, '-short', INPUT])
     results = results.decode("utf-8")
     results = results.splitlines()
@@ -40,13 +36,6 @@ def main():
     args = parse_args()
     INPUT = args.input
     OUTPUT = args.output
-
-    ## Get PHOBIUS_BIN
-    global PHOBIUS_BIN
-    PHOBIUS_BIN = shutil.which("phobius.pl")
-    PHOBIUS_BIN = os.getenv('PHOBIUS_BIN', PHOBIUS_BIN)
-    if PHOBIUS_BIN:
-        print("Using {}".format(PHOBIUS_BIN))
 
     ## Run phobius program
     run_phobius(INPUT, OUTPUT)
