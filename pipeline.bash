@@ -2,8 +2,11 @@
 
 #Usage statement
 usage () {
-	echo "Usage: rename.bash -g <input_gff> -n <input_nucl> -p <input_prot> -o <output_name>
+	echo "Usage: rename.bash -a <assembled_genome> -c <card.json> -m <card_model> -g <input_gff> -n <input_nucl> -p <input_prot> -o <output_name>
 	Required Arguments:
+	-a assembled genome
+	-c path/to/card.json
+	-m path/to/model
 	-g name of the input gff file that contains predicted genes
 	-n name of the input fna file that contains predicted genes
 	-p name of the input faa file that contains predicted proteins
@@ -22,24 +25,22 @@ check_for_help() {
 get_input() {
 	check_for_help "$1"
 	
+	assembledGenome=""
 	gff=""
 	nucl=""
 	prot=""
 	out=""
 	c=""
-	i=""
 	m=""
-	t=""
-	while getopts "g:n:p:o:c:i:m:t:h" opt; do
+	while getopts "a:g:n:p:o:c:m:h" opt; do
 		case $opt in
+		a ) assembledGenome=$OPTARG;;
 		g ) gff=$OPTARG;;
 		n ) nucl=$OPTARG;;
 		p ) prot=$OPTARG;;
 		o ) out=$OPTARG;;
 		c ) c=$OPTARG;;
-		i ) i=$OPTARG;;
 		m ) m=$OPTARG;;
-		t ) t=$OPTARG;;
 		h ) usage; exit 0;
 		esac
 	done
@@ -102,7 +103,7 @@ homology() {
 	# CARD
 	# TODO need to activate conda environment
 	rgi load -i $c --card_annotation $m --local
-	rgi main -i $i -o $o --input_type $t --local
+	rgi main -i $prot -o $o --input_type protein --local
 	
 	# InterProScan
 	# SWITCHING TO PYTHON3!
