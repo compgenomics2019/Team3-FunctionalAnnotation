@@ -13,9 +13,10 @@ RFAM_CM_FILE     = os.path.join(DIR, 'dependencies/Rfam/Rfam.cm')
 INPUT            = None # fasta
 OUTPUT_CMSCAN    = None # cmscan file
 OUTPUT_TBL       = None # table output
+OUTPUT_GFF       = None #
 
 def parse_arg():
-    global INPUT, OUTPUT_CMSCAN, OUTPUT_TBL
+    global INPUT, OUTPUT_CMSCAN, OUTPUT_TBL, OUTPUT_GFF
 
     parser = argparse.ArgumentParser(description='Search Rfam database')
     parser.add_argument('-i', '--input', required=True,
@@ -26,6 +27,7 @@ def parse_arg():
     INPUT = args.input
     OUTPUT_CMSCAN = args.output + ".cmscan"
     OUTPUT_TBL = args.output + ".out"
+    OUTPUT_GFF = args.output + ".gff"
     return None
 
 def run_infernal_rfam():
@@ -36,9 +38,53 @@ def run_infernal_rfam():
         "--clanin", RFAM_CLANIN_FILE, RFAM_CM_FILE, INPUT
     ], stdout = output_cmscan)
 
+def convert_gff():
+    output = open(OUTPUT_GFF, "w")
+    input = open(OUTPUT_TBL, "r")
+
+    output.write("##gff-version 3\n")
+
+    lines = input.readlines()
+
+    for line in lines:
+        line = line.rstrip()
+        if line.startswith("#"):
+            continue
+        words = line.split()
+
+        SEQID = words[3]
+        SOURCE = "."
+        TYPE = "."
+        FROM = words[9]
+        TO = words[10]
+        SCORE = "."
+        STRAND = words[11]
+        PHASE = "."
+
+        ADDITIONAL = [
+            "TARGET_NAME={}".format(words[1]),
+            "ACCESSION={}".format(words[2]),
+            "CLAN_NAME={}".format(words[5]),
+            "MDL={}".format(words[6]),
+            "MDL_FROM={}".format(words[7]),
+            "MDL_TO={}".format(words[8]),
+            "TRUNC={}".format(words[12]),
+            "PASS={}".format(words[13]),
+            "GC={}".format(words[14]),
+            "BIAS={}".format(words[15]),
+            "SCORE={}".format(words[16]),
+            "E_VALUE={}".format(words[17]),
+        ]
+        ADDITIONAL = ";".join(ADDITIONAL)
+        string_gff = "\t".join([SEQID, SOURCE, TYPE, FROM, TO, SCORE, STRAND, PHASE, ADDITIONAL])
+
+        output.write(string_gff + "\n")
+
+
 def main():
     parse_arg()
     run_infernal_rfam()
+    convert_gff()
 
 if __name__ == "__main__":
     main()
