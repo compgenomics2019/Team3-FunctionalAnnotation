@@ -72,8 +72,8 @@ For all the tools below add the exectuables to your PATH environment variable.
   Visit the CARD installation page for more detailed instructions https://card.mcmaster.ca/download. 
   
   ```
-cd /projects/team3/func_annot
-conda env create -f function_annotation.yml -n your_env_name
-source activate your_env_name
+  cd /projects/team3/func_annot
+  conda env create -f function_annotation.yml -n your_env_name
+  source activate your_env_name
   ```
   
