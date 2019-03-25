@@ -101,7 +101,7 @@ homology() {
 	python emapper.py -i $prot --output eggNOG_results -d bact -m diamond
 	
 	# CARD
-	# TODO need to activate conda environment
+	conda activate function_annotation
 	rgi load -i $c --card_annotation $m --local
 	rgi main -i $prot -o $o --input_type protein --local
 	
