@@ -15,6 +15,6 @@ do
         esac
 done
 
-signalp -fasta $input -org $org -format $format 
+/projects/team3/func_annot/bin/signalp-5.0/bin/signalp -fasta $input -org $org -format $format -gff3
 
 
