@@ -26,12 +26,20 @@ get_input() {
 	nucl=""
 	prot=""
 	out=""
-	while getopts "g:n:p:o:h" opt; do
+	c=""
+	i=""
+	m=""
+	t=""
+	while getopts "g:n:p:o:c:i:m:t:h" opt; do
 		case $opt in
 		g ) gff=$OPTARG;;
 		n ) nucl=$OPTARG;;
 		p ) prot=$OPTARG;;
 		o ) out=$OPTARG;;
+		c ) c=$OPTARG;;
+		i ) i=$OPTARG;;
+		m ) m=$OPTARG;;
+		t ) t=$OPTARG;;
 		h ) usage; exit 0;
 		esac
 	done
@@ -90,6 +98,11 @@ homology() {
 	# Run the homology based tools
 	# eggNOG
 	python emapper.py -i $prot --output eggNOG_results -d bact -m diamond
+	
+	# CARD
+	# TODO need to activate conda environment
+	rgi load -i $c --card_annotation $m --local
+	rgi main -i $i -o $o --input_type $t --local
 	
 	# InterProScan
 	# SWITCHING TO PYTHON3!
