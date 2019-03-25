@@ -1,20 +1,18 @@
 #!/bin/bash
 
-while getopts "i:f:o:h" option
+while getopts "i:o:h" option
 do
         case $option in
              i) input=$OPTARG;;
-             f) format=$OPTARG;;
              o) org=$OPTARG;;
-             h) echo "signalp.bash -i <Input File Address> -f <Output Format> -o <Organism Type>"
+             h) echo "signalp.bash -i <Input File Address> -o <Organism Type>"
                 echo "Required Arguments"
                 echo "-i Name of Input file. Needs to be a Fasta file"
-                echo "-f Output format. 'long' for generating the predictions with plots, 'short' for the predictions without plots."
                 echo "-o Organism. Archaea: 'arch', Gram-positive: 'gram+', Gram-negative: 'gram-' or Eukarya: 'euk'"
                 exit 0;
         esac
 done
 
-/projects/team3/func_annot/bin/signalp-5.0/bin/signalp -fasta $input -org $org -format $format -gff3
+/projects/team3/func_annot/bin/signalp-5.0/bin/signalp -fasta $input -org $org -format short -gff3
 
 
