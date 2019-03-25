@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import shutil
+import argparse
+import subprocess
+
+DIR              = os.path.dirname(__file__)
+RFAM_CLANIN_FILE = os.path.join(DIR, 'dependencies/Rfam/Rfam.clanin')
+RFAM_CM_FILE     = os.path.join(DIR, 'dependencies/Rfam/Rfam.cm')
+
+INPUT            = None # fasta
+OUTPUT_CMSCAN    = None # cmscan file
+OUTPUT_TBL       = None # table output
+
+def parse_arg():
+    global INPUT, OUTPUT_CMSCAN, OUTPUT_TBL
+
+    parser = argparse.ArgumentParser(description='Search Rfam database')
+    parser.add_argument('-i', '--input', required=True,
+                        help='Path of a fasta file containing nucleotide sequence')
+    parser.add_argument('-o', '--output', required=True,
+                        help='Prefix of the output files')
+    args = parser.parse_args()
+    INPUT = args.input
+    OUTPUT_CMSCAN = args.output + ".cmscan"
+    OUTPUT_TBL = args.output + ".out"
+    return None
+
+def run_infernal_rfam():
+    output_cmscan = open(OUTPUT_CMSCAN, "w")
+    subprocess.run([
+        "cmscan", "--rfam", "--cut_ga", "--nohmmonly",
+        "--tblout", OUTPUT_TBL, "--fmt", "2",
+        "--clanin", RFAM_CLANIN_FILE, RFAM_CM_FILE, INPUT
+    ], stdout = output_cmscan)
+
+def main():
+    parse_arg()
+    run_infernal_rfam()
+
+if __name__ == "__main__":
+    main()
