@@ -114,18 +114,20 @@ homology() {
 ab_initio() {
 	# Run the ab initio based tools
 	# Piler
-	./pilercr.sh -i $assembledGenome -o piler_out
+	pilercr -in $assembledGenome -out piler_out -quiet -noinfo
 	
 	# SignalP
-	./signalp.sh -i $prot -o gram+
+	# What is the output?
+	signalp -fasta $prot -org gram+ -format short -gff3
 }
 
 merge() {
 	# Merge the output of the all the tools together into a gff file
 	# Concatenate the output files together
+	cat eggNOG_out card_out intPro_out piler_out > final_out.gff
 }
 
-annotate_fast() {
+annotate_fasta() {
 	# Take the annotations from the gff file and give those annotation to the fasta files
 	# ie the nucleotide sequences and protein sequences
 	
@@ -134,8 +136,8 @@ annotate_fast() {
 main() {
 	get_input "$@"
 	check_files
-	homology
 	ab_initio
+	homology
 	merge
 	annotate_fasta
 }
