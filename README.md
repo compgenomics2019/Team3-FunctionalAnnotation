@@ -67,7 +67,7 @@ For all the tools below add the exectuables to your PATH environment variable.
   cd ..
   ```
   
-  - CARD: 
+- CARD: 
   ```
   conda search --channel bioconda rgi
   conda install --channel bioconda rgi
