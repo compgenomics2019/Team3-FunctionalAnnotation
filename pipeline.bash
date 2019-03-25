@@ -124,13 +124,13 @@ ab_initio() {
 	
 	# SignalP
 	# What is the output?
-	signalp -fasta $prot -org $org -format short -gff3
+	signalp -fasta $prot -org $org -format short -gff3 -prefix signalpOut
 }
 
 merge() {
 	# Merge the output of the all the tools together into a gff file
 	# Concatenate the output files together
-	cat eggNOG_out card_out intPro_out piler_out > final_out.gff
+	cat eggNOG_out card_out intPro_out piler_out signalpOut.gff3 > final_out.gff
 }
 
 annotate_fasta() {
