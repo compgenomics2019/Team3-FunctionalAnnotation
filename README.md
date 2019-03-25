@@ -66,3 +66,13 @@ For all the tools below add the exectuables to your PATH environment variable.
   ./prepare_phobius.sh
   cd ..
   ```
+  
+- CARD: 
+
+  Visit the CARD installation page for more detailed instructions https://card.mcmaster.ca/download. 
+  
+  ```
+  conda search --channel bioconda rgi
+  conda install --channel bioconda rgi
+  ```
+  
