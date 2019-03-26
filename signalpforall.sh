@@ -16,7 +16,7 @@ done
 
 mkdir tempsignalpout
 signalppath=$(which signalp)
-for file in $input*.faa
+for file in $input/*.faa
   do
 	f="$(echo $file | rev | cut -d/ -f1 | rev )"
   	#echo $f
