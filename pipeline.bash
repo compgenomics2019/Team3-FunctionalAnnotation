@@ -151,7 +151,10 @@ merge() {
 annotate_fasta() {
 	# Take the annotations from the gff file and give those annotation to the fasta files
 	# ie the nucleotide sequences and protein sequences
-	
+	gff=fina_out.gff
+	cat $gff | awk -F'\t' '{print $1 "\t" $2 "\t" $1 "|" $2 "|" $3 "|" $4 "|" $5 "|" $6 "|" $7 "|" $8 "|" $9 "\t" $4 "\t" $5 "\t" $6 "\t" $7 "\t" $8 "\t" $9}' > temp.gff
+	bedtools getfasta -fi $assembledGenome -bed temp.gff -fo "$out"".fna" -name
+	transeq "$out"".fna" "$out"".faa" -frame=1 -trim -sformat pearson
 }
 
 main() {
