@@ -73,13 +73,9 @@ main() {
 	# remap clustered proteins to gff files
 	rm -r merged_prot
 	mkdir merged_prot
-	mergedGff="/projects/team3/func_annot/merged.gff"
+	mergedGff="/projects/team3/func_annot/merged.gff" # TODO change this to the actual merged file
 	python ./remap.py -g $mergedGff -c nr95.clstr -d $inDir -o merged_prot > remap_log
 	echo "Done"
-	
-	
-	# merge gffs from tools that used clustered proteins with tools that didn't
-	
 	
 	# merge rRNAs
 	rm -r temp/
@@ -90,7 +86,20 @@ main() {
 		genome="$(cut -d'_' -f1 <<< $name)"
 		awk -F'\t' '{if ( $1 ~ /^>rRNA/) { split($1,array,"_"); split(array[8], coord, "-"); print array[2] "_" array[3] "_" array[4] "_" array[5] "_" array[6] "_" array[7] "\t" "rRNA" "\t" "rRNA" "\t" coord[1] "\t" coord[2] "\t.\t" substr(array[9],4,1) "\t.\t."; }}' $file > temp/"$genome"_scaffolds_cds.gff
 	done
-	./merge.bash merged_prot temp prot_n_rna
+	./merge.bash merged_prot temp prot_n_rna > log
+	
+	# merge gffs from tools that used clustered proteins with tools that didn't
+	
+	
+	# Create fasta files
+	echo "Creating fasta files"
+	rm -r final
+	mkdir final
+	./gffToFasta.bash -A prot_n_rna -G $assembledGenome -O final
+	mv prot_n_rna/* final
+	echo "Done"
+	
+	# remove temporary files
 }
 
 
