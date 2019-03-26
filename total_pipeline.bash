@@ -67,7 +67,7 @@ main() {
 	
 	echo "Calling tools on unclustered proteins: Phobius and SignalP"
 	# Call tools on unclustered proteins
-	./signalpforall.sh -i inputRenamed
+	./signalpforall.sh -i inputRenamed -o $org
 	echo "Done"
 	
 	echo "Calling tools on assembled genomes: Piler"
