@@ -164,7 +164,8 @@ def main():
     oldGffs = readOldGffs(oldGffDir)
     print("Done reading old gff files")
     for key in oldGffs.keys():
-        for annot in oldGffs[key]:
+        print(key)
+    #    for annot in oldGffs[key]:
     #         print(annot[0])
 
     if not os.path.exists(outputDir):
