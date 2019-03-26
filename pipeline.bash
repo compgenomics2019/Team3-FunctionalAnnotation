@@ -100,8 +100,6 @@ check_files() {
 
 homology() {
 	# Run the homology based tools
-	# eggNOG
-	python emapper.py -i $prot --output eggNOG_out -d bact -m diamond
 	
 	# CARD
 	conda activate function_annotation
@@ -118,6 +116,11 @@ homology() {
 
 	conda deactivate
 	
+	# eggNOG
+	python emapper.py -i $prot --output eggNOG_temp_out -d bact -m diamond
+	# Reformat egg output
+	python "$mydir"/eggNogGff.py -e eggNOG_temp_out -o eggNOG_out
+	
 	# InterProScan
 	# SWITCHING TO PYTHON3!
 	alias python=python3
@@ -133,8 +136,6 @@ ab_initio() {
 	rm temp_piler_out
 	
 	# SignalP
-	# What is the output?
-
 	# The prefix argument takes in a user input for name of the output file and appends a .gff3 at the end of the specified name.
 	# Here if the prefix is signalpOut, then the gff file obtained would be signalpOut.gff3
 	signalppath=$(which signalp)
