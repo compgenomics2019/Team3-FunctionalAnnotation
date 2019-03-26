@@ -44,7 +44,7 @@ def readCluster(clusterFile):
 def readOldGffs(oldGffDir):
     oldGffs = {}
     for filename in os.listdir(oldGffDir):
-        print(filename)
+        # print(filename)
         if filename.endswith(".gff") or filename.endswith(".gff3"):
             with open(oldGffDir + "/" + filename, 'r') as file:
                 for line in file:
