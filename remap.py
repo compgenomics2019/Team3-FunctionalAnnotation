@@ -57,7 +57,8 @@ def readOldGffs(oldGffDir):
                     prot_name_2 = start + "-" + stop + "(" + strand + ")_1" + "_" + str(filename)
                     # print(line)
                     # print(prot_name)
-                    oldGffs.setdefault(filename, []).append([prot_name, prot_name_2, line])
+                    basename = os.path.basename(filename)
+                    oldGffs.setdefault(basename, []).append([prot_name, prot_name_2, line])
     return oldGffs
 
 def my_split(s):
@@ -126,7 +127,8 @@ def remap(cluster, gffFile, oldGffs):
                         matchFound = False
                         # print(protein)
                         # print(fileName)
-                        for genePred in oldGffs[fileName]:
+                        basename = os.path.basename(fileName)
+                        for genePred in oldGffs[basename]:
                             genePred[0] = genePred[0].rstrip()
                             if genePred[0] == protein or genePred[1] == protein:
                                 # print("Match! protein = " + protein)
