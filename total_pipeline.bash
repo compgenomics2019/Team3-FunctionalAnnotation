@@ -65,9 +65,14 @@ main() {
 	# output should be called merged.gff
 	echo "Done"
 	
+	echo "Calling tools on unclustered proteins: Phobius and SignalP"
+	# Call tools on unclustered proteins
+	./signalpforall.sh -i inputRenamed > log
+	echo "Done"
+	
 	echo "Calling tools on assembled genomes: Piler"
 	# Call tools on assembledGenome
-	./pilerforall.sh -i $assembledGenome
+	./pilerforall.sh -i $assembledGenome > log
 	echo "Done"
 	
 	echo "Mapping clustered annotations to the whole cluster. Mapping coordinates back to scaffold coordinates. Mapping files back into 50 files."
