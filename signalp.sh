@@ -16,4 +16,3 @@ done
 signalppath=$(which signalp)
 $signalppath -fasta $input -org $org -format short -gff3 -prefix signalpOut
 
-
