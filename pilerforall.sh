@@ -10,7 +10,7 @@ do
 done
 
 mkdir pilerout
-for file in $input*.fasta
+for file in $input/*.fasta
   do
   f="$(echo $file | rev | cut -d/ -f1 | rev )"
   #echo $f
