@@ -63,7 +63,7 @@ main() {
 	
 	# Cluster
 	echo "Clustering"
-	./cluster.bash -I inputRenamed > log
+	./cluster.bash -I inputRenamed >> log
 	echo "Done"
 	
 	echo "Calling tools on clustered proteins: eggNOG, InterProScan, CARD"
@@ -74,7 +74,7 @@ main() {
 	# Call tools on unclustered proteins
 	echo "Calling tools on unclustered proteins: Phobius and SignalP"
 	rm -r tempsignalpout
-	./signalpforall.sh -i inputRenamed -o $org
+	./signalpforall.sh -i inputRenamed -o $org >> log
 	echo "Done"
 	
 	# Call tools on assembledGenome
