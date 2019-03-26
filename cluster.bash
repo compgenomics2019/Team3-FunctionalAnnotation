@@ -31,8 +31,8 @@ check_for_help() {
 }
 
 cluster() {
-	cat $inDir/*.faa > merged.faa
-	cd-hit -i clust_prot.faa -o nr95 -c 0.95 -s 0.95 -d 0
+	cat $inDir/*.faa > all_prot.faa
+	cd-hit -i all_prot.faa -o nr95 -c 0.95 -s 0.95 -d 0
 }
 
 main() {
