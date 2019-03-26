@@ -50,6 +50,7 @@ main() {
 	
 	# Rename input
 	echo "Renaming input"
+	rm -r inputRenamed
 	mkdir inputRenamed
 	./rename.bash -D $inDir -O inputRenamed > log
 	echo "Done"
@@ -59,19 +60,37 @@ main() {
 	./cluster.bash -I inputRenamed > log
 	echo "Done"
 	
-	echo "Calling tools on clustered proteins"
+	echo "Calling tools on clustered proteins: eggNOG, InterProScan, CARD"
 	# Call tools on clust_prot.faa
 	# output should be called merged.gff
 	echo "Done"
 	
+	echo "Calling tools on assembled genomes"
 	# Call tools on assembledGenome
+	echo "Done"
 	
+	echo "Mapping clustered annotations to the whole cluster. Mapping coordinates back to scaffold coordinates. Mapping files back into 50 files."
 	# remap clustered proteins to gff files
-	# python ./remap.py -g nr95 -c nr95.clstr -d inputRenamed
+	rm -r merged_prot
+	mkdir merged_prot
+	mergedGff="/projects/team3/func_annot/merged.gff"
+	python ./remap.py -g $mergedGff -c nr95.clstr -d inputRenamed -o merged_prot
+	echo "Done"
+	
 	
 	# merge gffs from tools that used clustered proteins with tools that didn't
 	
 	
+	# merge rRNAs
+	rm -r temp/
+	mkdir temp/
+	for file in $inDir/*_RNA.fna; do
+		genome=${file##*/}
+		name=${genome%.*}
+		genome="$(cut -d'_' -f1 <<< $name)"
+		awk -F'\t' '{if ( $1 ~ /^>rRNA/) { split($1,array,"_"); split(array[8], coord, "-"); print array[2] "_" array[3] "_" array[4] "_" array[5] "_" array[6] "_" array[7] "\t" "rRNA" "\t" "rRNA" "\t" coord[1] "\t" coord[2] "\t.\t" substr(array[9],4,1) "\t.\t."; }}' $file > temp/"$genome"_scaffolds_cds.gff
+	done
+	./merge.bash merged_prot temp prot_n_rna
 }
 
 
