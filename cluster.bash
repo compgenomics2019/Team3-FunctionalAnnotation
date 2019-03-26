@@ -37,7 +37,6 @@ cluster() {
 
 main() {
 	get_input "$@"
-	check_files
 	cluster
 }
 
