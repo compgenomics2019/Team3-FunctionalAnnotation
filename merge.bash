@@ -5,7 +5,7 @@ output=$3
 
 rm -r $output
 mkdir $output
-cd '$folder1'
+cd "$folder1"
 for file in *.gff; do
   echo $file
   [[ ! -f $file ]] && continue      # pick up only regular files

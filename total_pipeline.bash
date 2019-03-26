@@ -74,7 +74,7 @@ main() {
 	rm -r merged_prot
 	mkdir merged_prot
 	mergedGff="/projects/team3/func_annot/merged.gff"
-	python ./remap.py -g $mergedGff -c nr95.clstr -d $inDir -o merged_prot
+	python ./remap.py -g $mergedGff -c nr95.clstr -d $inDir -o merged_prot > remap_log
 	echo "Done"
 	
 	
