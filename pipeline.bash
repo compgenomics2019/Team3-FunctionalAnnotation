@@ -105,8 +105,18 @@ homology() {
 	
 	# CARD
 	conda activate function_annotation
+	
 	rgi load -i $c --card_annotation $m --local
 	rgi main -i $prot -o card_out --input_type protein --local
+	
+	#Door2 - Operon Prediction
+	mydir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+	"$mydir"/door2blast.py -i $prot -o door2_out
+
+	#VFDB - Virulence Factors
+	"$mydir"/vfdbblast.py -i $prot -o vfdb_out
+
+	conda deactivate
 	
 	# InterProScan
 	# SWITCHING TO PYTHON3!
@@ -133,7 +143,7 @@ ab_initio() {
 merge() {
 	# Merge the output of the all the tools together into a gff file
 	# Concatenate the output files together
-	cat eggNOG_out card_out intPro_out piler_out signalpOut.gff3 > final_out.gff
+	cat eggNOG_out card_out door2_out vfdb_out intPro_out piler_out signalpOut.gff3 > final_out.gff
 }
 
 annotate_fasta() {
