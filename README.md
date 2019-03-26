@@ -141,5 +141,9 @@ For all the tools below add the exectuables to your PATH environment variable.
   cd directory_for_CRT
   unzip CRT1.2-CLI.jar.zip
   ```
+  ## How to Run
   
-  
+ ```
+   cd Team3-FunctionalAnnotation/
+   ./total_pipeline.bash -i <input_dir> -a <assembled_genome_dir> -c <card.json> -m <card_model> -o <output_name> -t <org_type>
+ ```
