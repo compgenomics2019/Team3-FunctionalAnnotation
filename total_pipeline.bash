@@ -36,6 +36,12 @@ get_input() {
 		h ) usage; exit 0;
 		esac
 	done
+	
+	if [ "$org" != "gram+" ] && [ "$org" != "gram-" ] && [ "$org" != "euk" ]; then
+		echo "Please supply a valid type of organism"
+		usage
+		exit 1
+	fi
 }
 
 check_for_help() {
@@ -47,8 +53,6 @@ check_for_help() {
 
 main() {
 	get_input "$@"
-	
-	echo $org
 	
 	# Rename input
 	echo "Renaming input"
@@ -67,13 +71,15 @@ main() {
 	# output should be called merged.gff
 	echo "Done"
 	
-	echo "Calling tools on unclustered proteins: Phobius and SignalP"
 	# Call tools on unclustered proteins
+	echo "Calling tools on unclustered proteins: Phobius and SignalP"
+	rm -r tempsignalpout
 	./signalpforall.sh -i inputRenamed -o $org
 	echo "Done"
 	
-	echo "Calling tools on assembled genomes: Piler"
 	# Call tools on assembledGenome
+	echo "Calling tools on assembled genomes: Piler"
+	rm -r pilerout
 	./pilerforall.sh -i $assembledGenome
 	echo "Done"
 	
