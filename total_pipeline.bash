@@ -25,7 +25,7 @@ get_input() {
 	c=""
 	m=""
 	org=""
-	while getopts "a:g:n:p:o:c:m:t:h" opt; do
+	while getopts "i:a:o:c:m:t:h" opt; do
 		case $opt in
 		i ) inDir=$OPTARG;;
 		a ) assembledGenome=$OPTARG;;
