@@ -77,3 +77,6 @@ For all the tools below add the exectuables to your PATH environment variable.
   source activate your_env_name
   ```
   
+- signalP
+
+  The signalP software can be downloaded from http://www.cbs.dtu.dk/cgi-bin/sw_request?signalp by following the instructions mentioned on the webpage. The tool is available as an online utility as well.
