@@ -1,8 +1,36 @@
 
 # Team3 Functional Annotation
 
+## Bacterial Genome Annotation
+This pipeline is meant to perform functional annotation of bacterial genomes that have short reads. The pipeline uses both homology-based and ab-initio approaches. The pipeline is set to take in gff, fna and faa files from gene prediction as inputs.
 
 ## Dependencies
+This pipeline uses a conda environment for some dependencies. 
+We recommend that you download and install Miniconda from https://conda.io/en/latest/miniconda.html
+
+Example for installing Miniconda for Linux :
+
+```
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+./Miniconda3-latest-Linux-x86_64.sh
+rm  Miniconda3-latest-Linux-x86_64.sh
+```
+Next, clone the repository into your local system:
+
+```
+git clone  https://github.gatech.edu/compgenomics2019/Team3-FunctionalAnnotation.git
+#or
+git clone git@github.gatech.edu:compgenomics2019/Team3-FunctionalAnnotation.git
+```
+Create and activate a conda environment using the yml file provided:
+
+```
+#Create environment after downloading yml file
+conda-env create -f function_annotation.yml
+
+#To acativate the conda environment:
+conda activate function_annotation
+```
 For all the tools below add the exectuables to your PATH environment variable.
 - CD-HIT
 
@@ -70,10 +98,48 @@ For all the tools below add the exectuables to your PATH environment variable.
 - CARD: 
 
   Visit the CARD installation page for more detailed instructions https://card.mcmaster.ca/download. 
+  The rgi tool is installed as a part of the conda envrionment above.
+
+- SignalP
+
+  The SignalP software can be downloaded from http://www.cbs.dtu.dk/cgi-bin/sw_request?signalp by following the instructions mentioned on the webpage. The tool is available as an online utility as well.
   
   ```
-  cd /projects/team3/func_annot
-  conda env create -f function_annotation.yml -n your_env_name
-  source activate your_env_name
+  cd directory_for_SignalP
+  tar -xvzf signalp-5.0.tar.gz
   ```
+  
+- LipoP
+
+  The LipoP software can be downloaded from http://www.cbs.dtu.dk/cgi-bin/sw_request?lipop by following the instructions mentioned on the webpage. The tool is available as an online utility as well.
+  
+  LipoP was used to validate and compare the results of SignalP and not included in the final pipeline. As such, with SignalP 5.0, LipoP is not required as signalP performs its function as well.
+  
+  ```
+  cd directory_for_LipoP
+  tar -xvzf lipop-1.0a.Linux.tar.gz
+  ```
+  
+  Once LipoP has been unzipped into the required directory, change the libdir variable to the path of the LipoP directory in the LipoP script.
+  
+- pilercr
+
+  pilercr is available on https://www.drive5.com/pilercr/. It is used to locate CRISPR arrays in genomes.
+  
+  ```
+  cd directory_for_pilercr
+  tar -xvzf pilercr1.06.tar.gz
+  ```
+  
+- CRT
+
+  CRT can be downloaded from http://www.room220.com/crt/. It is a CRISPR recognition tool. 
+  
+  CRT was used to compare the results obtained from pilercr. It was not used in the final pipeline. 
+  
+  ```
+  cd directory_for_CRT
+  unzip CRT1.2-CLI.jar.zip
+  ```
+  
   

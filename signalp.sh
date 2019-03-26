@@ -13,6 +13,7 @@ do
         esac
 done
 
-/projects/team3/func_annot/bin/signalp-5.0/bin/signalp -fasta $input -org $org -format short -gff3
+signalppath=$(which signalp)
+$signalppath -fasta $input -org $org -format short -gff3 -prefix signalpOut
 
 
