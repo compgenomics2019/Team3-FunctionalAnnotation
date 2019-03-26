@@ -47,7 +47,7 @@ check_files() {
 		exit 1
 	fi
 	
-	for file in $faaDir/*.fna; do
+	for file in $faaDir/*.faa; do
 		if [ -f "$file" ]; then
 			while read p; do
 				file=${file#*/}

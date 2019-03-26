@@ -49,14 +49,20 @@ main() {
 	get_input "$@"
 	
 	# Rename input
+	echo "Renaming input"
 	mkdir inputRenamed
 	./rename.bash -D $inDir -O inputRenamed > log
+	echo "Done"
 	
 	# Cluster
+	echo "Clustering"
 	./cluster.bash -I inputRenamed > log
+	echo "Done"
 	
+	echo "Calling tools on clustered proteins"
 	# Call tools on clust_prot.faa
 	# output should be called merged.gff
+	echo "Done"
 	
 	# Call tools on assembledGenome
 	
