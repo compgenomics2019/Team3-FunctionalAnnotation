@@ -94,7 +94,11 @@ main() {
 	done
 	./merge.bash merged_prot temp prot_n_rna > log
 	
-	# merge gffs from tools that used clustered proteins with tools that didn't
+	# merge gffs from tools that didn't use proteins
+	# Piler
+	rm -r prot_n_rna_n_piler/
+	mkdir prot_n_rna_n_piler/
+	./merge.bash prot_n_rna pilerout prot_n_rna_n_piler
 	
 	
 	# Create fasta files
