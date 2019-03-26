@@ -120,7 +120,7 @@ def remap(cluster, gffFile, oldGffs):
                 if name in cluster:
                     currCluster = cluster[name]
                     for protein in currCluster:
-                        print(protein)
+                        # print(protein)
                         protein = protein.replace(".faa", ".gff")
                         protein = protein.rstrip()
                         fileName = "_".join(protein.split('_')[2::])

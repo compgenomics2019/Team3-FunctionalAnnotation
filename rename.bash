@@ -50,7 +50,7 @@ check_files() {
 	for file in $faaDir/*.faa; do
 		if [ -f "$file" ]; then
 			while read p; do
-				file=${file#*/}
+				file=${file##*/}
 				if [[ $p == \>* ]]; then 
 					p="${p}_${file}"
 					# echo "$p"
