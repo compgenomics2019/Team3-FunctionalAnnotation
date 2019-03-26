@@ -48,6 +48,8 @@ check_for_help() {
 main() {
 	get_input "$@"
 	
+	echo $org
+	
 	# Rename input
 	echo "Renaming input"
 	rm -r inputRenamed
