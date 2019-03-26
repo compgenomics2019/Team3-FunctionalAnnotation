@@ -163,8 +163,8 @@ def main():
     print("Reading gff information from original gene prediction files")
     oldGffs = readOldGffs(oldGffDir)
     print("Done reading old gff files")
-    # for key in oldGffs.keys():
-    #     for annot in oldGffs[key]:
+    for key in oldGffs.keys():
+        for annot in oldGffs[key]:
     #         print(annot[0])
 
     if not os.path.exists(outputDir):
