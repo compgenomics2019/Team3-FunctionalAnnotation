@@ -65,8 +65,9 @@ main() {
 	# output should be called merged.gff
 	echo "Done"
 	
-	echo "Calling tools on assembled genomes"
+	echo "Calling tools on assembled genomes: Piler"
 	# Call tools on assembledGenome
+	./pilerforall.sh -i $assembledGenome
 	echo "Done"
 	
 	echo "Mapping clustered annotations to the whole cluster. Mapping coordinates back to scaffold coordinates. Mapping files back into 50 files."
