@@ -49,6 +49,7 @@ main() {
 	get_input "$@"
 	
 	# Rename input
+	mkdir inputRenamed
 	./rename.bash -D $inDir -O inputRenamed > log
 	
 	# Cluster
