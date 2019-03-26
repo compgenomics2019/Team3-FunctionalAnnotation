@@ -1,37 +1,26 @@
 #!/bin/bash
 
-while getopts "i:o:t:h" option
+while getopts "i:o:h" option
 do
 	case $option in
 	     i) input=$OPTARG;;
-			 o) output=$OPTARG;;
-	     t) org=$OPTARG;;
-	     h) echo "signalp.bash -i <Input File Directory> -f <Output Format> -o <Organism Type>"
-					echo "Required Arguments"
-	        echo "-i Name of Input file Directory. Input Needs to be a Protein Fasta file. The script assumes the files are in .faa or .fasta format"
-					echo "-o Name of Output file Directory. Please ensure directory exists before running script"
-        	echo "-t Organism. Archaea: 'arch', Gram-positive: 'gram+', Gram-negative: 'gram-' or Eukarya: 'euk'"
+	     o) org=$OPTARG;;
+	     h) echo "signalpforall.bash -i <Input File Directory - Only .faa files> -o <Organism Type>"
+		echo "Required Arguments"
+	        echo "-i Name of Input file Directory. Input Needs to be a Protein Fasta file. The script assumes the files are in .faa format"
+        	echo "-o Organism. Archaea: 'arch', Gram-positive: 'gram+', Gram-negative: 'gram-' or Eukarya: 'euk'"
  		exit 0;
 	esac
 done
 
+
+mkdir tempsignalpout
 signalppath=$(which signalp)
-#echo $signalppath
-cd $input
-for f in *.faa
+for file in $input*.faa
   do
-  #echo $f
+	f="$(echo $file | rev | cut -d/ -f1 | rev )"
+  	#echo $f
 	f2=${f%.faa}
-	echo $f2
-	$signalppath -fasta $f -org $org -format short -gff3 -prefix $output/$f2
+	#echo $f2
+	$signalppath -fasta $file -org $org -format short -gff3 -prefix tempsignalpout/$f2
   done
-
-for f in *.fasta
-	  do
-	  #echo $f
-		f2=${f%.fasta}
-		echo $f2
-		$signalppath -fasta $f -org $org -format short -gff3 -prefix $output/$f2
-	  done
-	
-
