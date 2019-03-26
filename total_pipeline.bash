@@ -48,8 +48,11 @@ check_for_help() {
 main() {
 	get_input "$@"
 	
+	# Rename input
+	./rename.bash -D $inDir -O inputRenamed > log
+	
 	# Cluster
-	./cluster.bash -I $inDir > log
+	./cluster.bash -I inputRenamed > log
 	
 	# Call tools on clust_prot.faa
 	# output should be called merged.gff
@@ -57,7 +60,7 @@ main() {
 	# Call tools on assembledGenome
 	
 	# remap clustered proteins to gff files
-	# python ./remap.py -g nr95 -c nr95.clstr -d $inDir
+	# python ./remap.py -g nr95 -c nr95.clstr -d inputRenamed
 	
 	# merge gffs from tools that used clustered proteins with tools that didn't
 	
