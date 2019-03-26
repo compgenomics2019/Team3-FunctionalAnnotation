@@ -1,8 +1,36 @@
 
 # Team3 Functional Annotation
 
+## Bacterial Genome Annotation
+This pipeline is meant to perform functional annotation of bacterial genomes that have short reads. The pipeline uses both homology-based and ab-initio approaches. The pipeline is set to take in gff, fna and faa files from gene prediction as inputs.
 
 ## Dependencies
+This pipeline uses a conda environment for some dependencies. 
+We recommend that you download and install Miniconda from https://conda.io/en/latest/miniconda.html
+
+Example for installing Miniconda for Linux :
+
+```
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+./Miniconda3-latest-Linux-x86_64.sh
+rm  Miniconda3-latest-Linux-x86_64.sh
+```
+Next, clone the repository into your local system:
+
+```
+git clone  https://github.gatech.edu/compgenomics2019/Team3-FunctionalAnnotation.git
+#or
+git clone git@github.gatech.edu:compgenomics2019/Team3-FunctionalAnnotation.git
+```
+Create and activate a conda environment using the yml file provided:
+
+```
+#Create environment after downloading yml file
+conda-env create -f function_annotation.yml
+
+#To acativate the conda environment:
+conda activate function_annotation
+```
 For all the tools below add the exectuables to your PATH environment variable.
 - CD-HIT
 
@@ -70,13 +98,8 @@ For all the tools below add the exectuables to your PATH environment variable.
 - CARD: 
 
   Visit the CARD installation page for more detailed instructions https://card.mcmaster.ca/download. 
-  
-  ```
-  cd /projects/team3/func_annot
-  conda env create -f function_annotation.yml -n your_env_name
-  source activate your_env_name
-  ```
-  
+  The rgi tool is installed as a part of the conda envrionment above.
+
 - SignalP
 
   The SignalP software can be downloaded from http://www.cbs.dtu.dk/cgi-bin/sw_request?signalp by following the instructions mentioned on the webpage. The tool is available as an online utility as well.
