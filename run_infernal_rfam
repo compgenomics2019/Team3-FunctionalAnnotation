@@ -53,7 +53,7 @@ def convert_gff():
         words = line.split()
 
         SEQID = words[3]
-        SOURCE = "."
+        SOURCE = "rfam"
         TYPE = "."
         FROM = words[9]
         TO = words[10]

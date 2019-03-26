@@ -44,6 +44,7 @@ def readCluster(clusterFile):
 def readOldGffs(oldGffDir):
     oldGffs = {}
     for filename in os.listdir(oldGffDir):
+        # print(filename)
         if filename.endswith(".gff") or filename.endswith(".gff3"):
             with open(oldGffDir + "/" + filename, 'r') as file:
                 for line in file:
@@ -52,11 +53,12 @@ def readOldGffs(oldGffDir):
                     stop = lineSplit[4]
                     strand = lineSplit[6]
                     # print(filename)
-                    prot_name = start + "-" + stop + strand + "_1" + "_" + str(filename)
-                    prot_name_2 = start + "-" + stop + "(" + strand + ")_1" + "_" + str(filename)
+                    basename = os.path.basename(filename)
+                    prot_name = start + "-" + stop + strand + "_1" + "_" + str(basename)
+                    prot_name_2 = start + "-" + stop + "(" + strand + ")_1" + "_" + str(basename)
                     # print(line)
                     # print(prot_name)
-                    oldGffs.setdefault(filename, []).append([prot_name, prot_name_2, line])
+                    oldGffs.setdefault(basename, []).append([prot_name, prot_name_2, line])
     return oldGffs
 
 def my_split(s):
@@ -66,6 +68,11 @@ def changeCoord(originalLine, line):
     lineSplit = line.split("\t")
     originalLineSplit = originalLine.split("\t")
     seqname = originalLineSplit[0]
+    originalStrand = originalLineSplit[6]
+    id = originalLineSplit[8].split(";")[0]
+    # print(originalLine)
+    # print(id)
+
     name = lineSplit[0]
     originalStart = my_split(name)[0]
     originalStop = my_split(name)[2]
@@ -77,17 +84,18 @@ def changeCoord(originalLine, line):
     score = lineSplit[5]
     strand = lineSplit[6]
     frame = lineSplit[7]
-    attribute = lineSplit[8]
+    attribute = lineSplit[8].rstrip()
 
-
+    attribute = id + ";" + attribute
+    strand = originalStrand
     if start == ".":
         start = 1
 
     if stop == ".":
         stop = int(originalStop) - int(originalStart)
 
-    newStart = int(originalStart) + int(start) - 1
-    newStop = int(originalStop) + int(originalStart)
+    newStart = int(originalStart) + int(start)
+    newStop = int(stop) + int(originalStart)
     newLine = "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\n".format(seqname, source, feature, newStart, newStop, score, strand, frame, attribute)
     return newLine
 
@@ -112,6 +120,7 @@ def remap(cluster, gffFile, oldGffs):
                 if name in cluster:
                     currCluster = cluster[name]
                     for protein in currCluster:
+                        # print(protein)
                         protein = protein.replace(".faa", ".gff")
                         protein = protein.rstrip()
                         fileName = "_".join(protein.split('_')[2::])
@@ -119,11 +128,14 @@ def remap(cluster, gffFile, oldGffs):
                         matchFound = False
                         # print(protein)
                         # print(fileName)
-                        for genePred in oldGffs[fileName]:
+                        basename = os.path.basename(fileName)
+                        for genePred in oldGffs[basename]:
                             genePred[0] = genePred[0].rstrip()
                             if genePred[0] == protein or genePred[1] == protein:
                                 # print("Match! protein = " + protein)
-                                newLine = changeCoord(genePred[1], replaced)
+                                # print("Replaced = " + replaced)
+                                # print("Original name = " + genePred[1])
+                                newLine = changeCoord(genePred[2], replaced)
                                 newGffs.setdefault(fileName, []).append(newLine)
                                 matchFound = True
                                 break
@@ -144,21 +156,27 @@ def writeNewGffs(newGffs, outputDir):
                 output.write(line)
 
 def main():
+    print("Parsing args")
     gffFile, clusterFile, oldGffDir, outputDir = parseArgs()
+    print("Done parsing args\nReading Cluster File")
     cluster = readCluster(clusterFile)
-
+    print("Done reading cluster file")
     # for key in cluster.keys():
     #     print(key)
     #     print(cluster[key])
+    print("Reading gff information from original gene prediction files")
     oldGffs = readOldGffs(oldGffDir)
-    # for key in oldGffs.keys():
-    #     for annot in oldGffs[key]:
+    print("Done reading old gff files")
+    for key in oldGffs.keys():
+        print(key)
+    #    for annot in oldGffs[key]:
     #         print(annot[0])
 
     if not os.path.exists(outputDir):
         os.makedirs(outputDir)
-
+    print("Doing the remapping")
     newGffs = remap(cluster, gffFile, oldGffs)
+    print("Done remapping")
     writeNewGffs(newGffs, outputDir)
 
 main()

@@ -40,7 +40,7 @@ def convert_gff(OUTPUT):
         words = line.split()
 
         SEQID      = words[0]
-        SOURCE     = "."
+        SOURCE     = "phobius"
         TYPE       = "."
         FROM       = "."
         TO         = "."

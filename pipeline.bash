@@ -2,7 +2,7 @@
 
 #Usage statement
 usage () {
-	echo "Usage: rename.bash -a <assembled_genome> -c <card.json> -m <card_model> -g <input_gff> -n <input_nucl> -p <input_prot> -o <output_name>
+	echo "Usage: rename.bash -a <assembled_genome> -c <card.json> -m <card_model> -g <input_gff> -n <input_nucl> -p <input_prot> -o <output_name> -t <org_type>
 	Required Arguments:
 	-a assembled genome
 	-c path/to/card.json
@@ -11,6 +11,7 @@ usage () {
 	-n name of the input fna file that contains predicted genes
 	-p name of the input faa file that contains predicted proteins
 	-o desired name of the annotated output files. This will included annotated nucleotide, protein, and gff files.
+	-t Type of Organism - Required for SignalP. Archaea: 'arch', Gram-positive: 'gram+', Gram-negative: 'gram-' or Eukarya: 'euk'
 	"
 }
 
@@ -32,7 +33,8 @@ get_input() {
 	out=""
 	c=""
 	m=""
-	while getopts "a:g:n:p:o:c:m:h" opt; do
+	org=""
+	while getopts "a:g:n:p:o:c:m:t:h" opt; do
 		case $opt in
 		a ) assembledGenome=$OPTARG;;
 		g ) gff=$OPTARG;;
@@ -41,6 +43,7 @@ get_input() {
 		o ) out=$OPTARG;;
 		c ) c=$OPTARG;;
 		m ) m=$OPTARG;;
+		t ) org=$OPTARG;;
 		h ) usage; exit 0;
 		esac
 	done
@@ -97,41 +100,68 @@ check_files() {
 
 homology() {
 	# Run the homology based tools
-	# eggNOG
-	python emapper.py -i $prot --output eggNOG_results -d bact -m diamond
 	
 	# CARD
-	# TODO need to activate conda environment
+	conda activate function_annotation
+	
 	rgi load -i $c --card_annotation $m --local
-	rgi main -i $prot -o $o --input_type protein --local
+	rgi main -i $prot -o card_out --input_type protein --local
+	
+	#Door2 - Operon Prediction
+	mydir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+	"$mydir"/door2blast.py -i $prot -o door2_out
+
+	#VFDB - Virulence Factors
+	"$mydir"/vfdbblast.py -i $prot -o vfdb_out
+
+	conda deactivate
+	
+	# eggNOG
+	python emapper.py -i $prot --output eggNOG_temp_out -d bact -m diamond
+	# Reformat egg output
+	python "$mydir"/eggNogGff.py -e eggNOG_temp_out -o eggNOG_out
 	
 	# InterProScan
 	# SWITCHING TO PYTHON3!
 	alias python=python3
-	interproscan.sh -i $prot -o intPro_results -f gff3
+	interproscan.sh -i $prot -o intPro_out -f gff3
 }
 
 ab_initio() {
 	# Run the ab initio based tools
+	# Piler
+	pilercr -in $assembledGenome -out temp_piler_out -quiet -noinfo
+	#convert pilercr output to gff file
+	python pilercrtogff.py temp_piler_out piler_out
+	rm temp_piler_out
 	
+	# SignalP
+	# The prefix argument takes in a user input for name of the output file and appends a .gff3 at the end of the specified name.
+	# Here if the prefix is signalpOut, then the gff file obtained would be signalpOut.gff3
+	signalppath=$(which signalp)
+	$signalppath -fasta $prot -org $org -format short -gff3 -prefix signalpOut
 }
 
 merge() {
 	# Merge the output of the all the tools together into a gff file
 	# Concatenate the output files together
+	cat eggNOG_out card_out door2_out vfdb_out intPro_out piler_out signalpOut.gff3 > final_out.gff
 }
 
-annotate_fast() {
+annotate_fasta() {
 	# Take the annotations from the gff file and give those annotation to the fasta files
 	# ie the nucleotide sequences and protein sequences
-	
+	gff=fina_out.gff
+	cat $gff | awk -F'\t' '{print $1 "\t" $2 "\t" $1 "|" $2 "|" $3 "|" $4 "|" $5 "|" $6 "|" $7 "|" $8 "|" $9 "\t" $4 "\t" $5 "\t" $6 "\t" $7 "\t" $8 "\t" $9}' > temp.gff
+	bedtools getfasta -fi $assembledGenome -bed temp.gff -fo "$out"".fna" -name
+	transeq "$out"".fna" "$out"".faa" -frame=1 -trim -sformat pearson
 }
 
 main() {
 	get_input "$@"
 	check_files
-	homology
 	ab_initio
+	homology
 	merge
 	annotate_fasta
 }
