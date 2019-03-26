@@ -5,7 +5,7 @@
 
 #Usage statement
 usage () {
-	echo "Usage: total_pipeline.bash -i <input_dir> -a <assembled_genome_dir> -c <card.json> -m <card_model> -o <output_name> -t <org_type>
+	echo "Usage: total_pipeline.bash -i <input_dir> -o <output_name> -a <assembled_genome_dir> -c <card.json> -m <card_model> -t <org_type>
 	Required Arguments:
 	-i input directory containing gff, fna, and faa files
 	-o desired name of the annotated output dir. This will included annotated nucleotide, protein, and gff files.
