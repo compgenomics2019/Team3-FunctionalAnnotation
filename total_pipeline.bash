@@ -80,7 +80,7 @@ main() {
 	# Call tools on assembledGenome
 	echo "Calling tools on assembled genomes: Piler"
 	rm -r pilerout
-	./pilerforall.sh -i $assembledGenome
+	./pilerforall.sh -i $assembledGenome >> log
 	echo "Done"
 	
 	echo "Mapping clustered annotations to the whole cluster. Mapping coordinates back to scaffold coordinates. Mapping files back into 50 files."
