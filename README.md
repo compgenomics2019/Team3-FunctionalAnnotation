@@ -77,6 +77,34 @@ For all the tools below add the exectuables to your PATH environment variable.
   source activate your_env_name
   ```
   
-- signalP
+- SignalP
 
-  The signalP software can be downloaded from http://www.cbs.dtu.dk/cgi-bin/sw_request?signalp by following the instructions mentioned on the webpage. The tool is available as an online utility as well.
+  The SignalP software can be downloaded from http://www.cbs.dtu.dk/cgi-bin/sw_request?signalp by following the instructions mentioned on the webpage. The tool is available as an online utility as well.
+  
+  ```
+  cd directory_for_SignalP
+  tar -xvzf signalp-5.0.tar.gz
+  ```
+  
+- LipoP
+
+  The LipoP software can be downloaded from http://www.cbs.dtu.dk/cgi-bin/sw_request?lipop by following the instructions mentioned on the webpage. The tool is available as an online utility as well.
+  
+  LipoP was used to validate the results of SignalP and not included in the final pipeline. As such, with SignalP 5.0, LipoP is not required as signalP performs its function as well
+  
+  ```
+  cd directory_for_LipoP
+  tar -xvzf lipop-1.0a.Linux.tar.gz
+  ```
+  
+- pilercr
+
+  pilercr is available on https://www.drive5.com/pilercr/. 
+  
+  ```
+  cd directory_for_pilercr
+  tar -xvzf pilercr1.06.tar.gz
+  ```
+  
+  
+  
