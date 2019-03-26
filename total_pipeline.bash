@@ -92,7 +92,7 @@ main() {
 	
 	
 	# Create fasta files
-	echo "Creating fasta files"
+	echo "Creating nucleotide and protein fasta files"
 	rm -r final
 	mkdir final
 	./gffToFasta.bash -A prot_n_rna -G $assembledGenome -O final
