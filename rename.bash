@@ -56,7 +56,7 @@ check_files() {
 					# echo "$p"
 				fi
 				name=${file##*/}
-				outFile="${outDir}${name}"
+				outFile="${outDir}/${name}"
 				echo "$p" >> $outFile
 			done < $file
 			echo "finished file: $file"
