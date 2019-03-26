@@ -53,11 +53,11 @@ def readOldGffs(oldGffDir):
                     stop = lineSplit[4]
                     strand = lineSplit[6]
                     # print(filename)
-                    prot_name = start + "-" + stop + strand + "_1" + "_" + str(filename)
-                    prot_name_2 = start + "-" + stop + "(" + strand + ")_1" + "_" + str(filename)
+                    basename = os.path.basename(filename)
+                    prot_name = start + "-" + stop + strand + "_1" + "_" + str(basename)
+                    prot_name_2 = start + "-" + stop + "(" + strand + ")_1" + "_" + str(basename)
                     # print(line)
                     # print(prot_name)
-                    basename = os.path.basename(filename)
                     oldGffs.setdefault(basename, []).append([prot_name, prot_name_2, line])
     return oldGffs
 
