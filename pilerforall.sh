@@ -16,7 +16,7 @@ for file in $input*.fasta
   #echo $f
   pilercr -in $file -out pilerout/temp_piler_out -quiet -noinfo
   f2=${f%.fasta}.gff
-  python pilertogff.py pilerout/temp_piler_out pilerout/$f2
+  python pilercrtogff.py pilerout/temp_piler_out pilerout/$f2
   rm pilerout/temp_piler_out
   done
 
