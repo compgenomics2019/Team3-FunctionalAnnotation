@@ -5,7 +5,7 @@
 
 #Usage statement
 usage () {
-	echo "Usage: total_pipeline.bash -i <input_dir> -a <assembled_genome_dir> -c <card.json> -m <card_model> -o <output_name> -t <org_type>
+	echo "Usage: total_pipeline.bash -i <input_dir> -o <output_name> -a <assembled_genome_dir> -c <card.json> -m <card_model> -t <org_type>
 	Required Arguments:
 	-i input directory containing gff, fna, and faa files
 	-o desired name of the annotated output dir. This will included annotated nucleotide, protein, and gff files.
@@ -36,6 +36,12 @@ get_input() {
 		h ) usage; exit 0;
 		esac
 	done
+	
+	if [ "$org" != "gram+" ] && [ "$org" != "gram-" ] && [ "$org" != "euk" ]; then
+		echo "Please supply a valid type of organism"
+		usage
+		exit 1
+	fi
 }
 
 check_for_help() {
@@ -57,7 +63,7 @@ main() {
 	
 	# Cluster
 	echo "Clustering"
-	./cluster.bash -I inputRenamed > log
+	./cluster.bash -I inputRenamed >> log
 	echo "Done"
 	
 	echo "Calling tools on clustered proteins: eggNOG, InterProScan, CARD"
@@ -65,8 +71,16 @@ main() {
 	# output should be called merged.gff
 	echo "Done"
 	
-	echo "Calling tools on assembled genomes"
+	# Call tools on unclustered proteins
+	echo "Calling tools on unclustered proteins: Phobius and SignalP"
+	rm -r tempsignalpout
+	./signalpforall.sh -i inputRenamed -o $org >> log
+	echo "Done"
+	
 	# Call tools on assembledGenome
+	echo "Calling tools on assembled genomes: Piler"
+	rm -r pilerout
+	./pilerforall.sh -i $assembledGenome
 	echo "Done"
 	
 	echo "Mapping clustered annotations to the whole cluster. Mapping coordinates back to scaffold coordinates. Mapping files back into 50 files."
@@ -88,7 +102,11 @@ main() {
 	done
 	./merge.bash merged_prot temp prot_n_rna > log
 	
-	# merge gffs from tools that used clustered proteins with tools that didn't
+	# merge gffs from tools that didn't use proteins
+	# Piler
+	rm -r prot_n_rna_n_piler/
+	mkdir prot_n_rna_n_piler/
+	./merge.bash prot_n_rna pilerout prot_n_rna_n_piler
 	
 	
 	# Create fasta files
