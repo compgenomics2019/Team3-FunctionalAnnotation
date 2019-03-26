@@ -78,7 +78,7 @@ def changeCoord(originalLine, line):
 Give the annotations that were given to the representative sequence to all the
 proteins in the cluster. Put the proteins into their correct gff file (out of 50 total).
 """
-def remap(cluster, gffFile, oldGffs):
+def remap(gffFile, oldGffs):
     newGffs = {}
 
     # Make a gff file for
@@ -96,14 +96,14 @@ def remap(cluster, gffFile, oldGffs):
                 name = name.rstrip()
                 fileName = "_".join(name.split('_')[2::])
                 # replaced = line.replace(name, protein)  # replaces the representative protein name with the protein of this one in the cluster
-                # matchFound = False
+                matchFound = False
                 # print(protein)
                 # print(fileName)
                 basename = os.path.basename(fileName)
                 for genePred in oldGffs[basename]:
                     genePred[0] = genePred[0].rstrip()
                     if genePred[0] == name or genePred[1] == name:
-                        # print("Match! protein = " + protein)
+                        # print("Match! name = " + name)
                         # print("Replaced = " + replaced)
                         # print("Original name = " + genePred[1])
                         newLine = changeCoord(genePred[2], line)
