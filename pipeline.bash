@@ -2,7 +2,7 @@
 
 #Usage statement
 usage () {
-	echo "Usage: rename.bash -c <card.json> -m <card_model> -p <input_prot> -o <output_name> 
+	echo "Usage: rename.bash -c <card.json> -m <card_model> -p <input_prot>
 	Required Arguments:
 	-c path/to/card.json
 	-m path/to/model
@@ -71,15 +71,15 @@ homology() {
 
 	conda deactivate
 	
+	# InterProScan
+	interproscan.sh -i $prot -o intPro_out -f gff3
+	
+	# SWITCHING TO PYTHON2!
+	alias python=python2.7
 	# eggNOG
 	python emapper.py -i $prot --output eggNOG_temp_out -d bact -m diamond
 	# Reformat egg output
-	python "$mydir"/eggNogGff.py -e eggNOG_temp_out -o eggNOG_out
-	
-	# InterProScan
-	# SWITCHING TO PYTHON3!
-	alias python=python3
-	interproscan.sh -i $prot -o intPro_out -f gff3
+	python eggNogGff.py -e eggNOG_temp_out -o eggNOG_out
 }
 
 merge() {
