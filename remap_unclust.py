@@ -94,7 +94,7 @@ def remap(gffDir, oldGffs):
                         # print(name)
                         # print(fileName)
 
-                        name = name.replace(".faa", ".gff")
+                        name = name.replace(".faa", ".gff3")
                         name = name.rstrip()
                         fileName = "_".join(name.split('_')[2::])
                         # replaced = line.replace(name, protein)  # replaces the representative protein name with the protein of this one in the cluster
