@@ -1,4 +1,5 @@
 #!/bin/bash
+shopt -s expand_aliases
 
 #Usage statement
 usage () {
@@ -55,7 +56,12 @@ check_files() {
 
 homology() {
 	# Run the homology based tools
-
+	# SWITCHING TO PYTHON2!
+	eggScript="$(which emapper.py)"
+	# eggNOG
+        python2 $eggScript -i $prot --output eggNOG_temp_out -d bact -m diamond
+        # Reformat egg output
+        python eggNogGff.py -e eggNOG_temp_out.annotations -o eggNOG_out
 	
 	#Door2 - Operon Prediction
 	mydir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
@@ -66,13 +72,6 @@ homology() {
 	
 	# InterProScan
 	interproscan.sh -i $prot -o intPro_out -f gff3
-	
-	# SWITCHING TO PYTHON2!
-	alias python=python2.7
-	# eggNOG
-	python emapper.py -i $prot --output eggNOG_temp_out -d bact -m diamond
-	# Reformat egg output
-	python eggNogGff.py -e eggNOG_temp_out -o eggNOG_out
 	
 	# CARD
 	rgi load -i $c --card_annotation $m --local
