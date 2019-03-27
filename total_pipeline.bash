@@ -73,6 +73,14 @@ main() {
 	
 	# Call tools on unclustered proteins
 	echo "Calling tools on unclustered proteins: Phobius and SignalP"
+	rm -r tempsignalpout
+	./signalpforall.sh -i inputRenamed -o $org >> log
+	
+	# Remap the SignalP output to the original scaffolds
+	rm -r signalpRemap
+	mkdir signalpRemap
+	python remap_unclust.py -g tempsignalpout -d inputRenamed -o signalpRemap
+	
 	## phobius
 	echo "Start running phobius"
 	rm -r tempphobiusout # clean up
@@ -85,15 +93,6 @@ main() {
 	wait
 	echo "...phobius done"
 	## Now the output should be at "tempphobiusout/<basename>.gff" and "tempphobiusout/<basename>.out"
-	
-	rm -r tempsignalpout
-	./signalpforall.sh -i inputRenamed -o $org >> log
-	
-	# Remap the SignalP output to the original scaffolds
-	rm -r signalpRemap
-	mkdir signalpRemap
-	python remapy_unclust.py -g tempsignalpout -d inputRenamed -o signalpRemap
-	
 	echo "Done"
 	
 	# Call tools on assembledGenome
