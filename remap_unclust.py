@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser()
 
 def parseArgs():
     global parser
-    parser.add_argument("-g", help = "GFF file")
+    parser.add_argument("-g", help = "Directory of GFF file")
     parser.add_argument("-d", help = "Orignal directory of gff files")
 
     parser.add_argument("-o", help = "Name of output directory")
@@ -78,41 +78,43 @@ def changeCoord(originalLine, line):
 Give the annotations that were given to the representative sequence to all the
 proteins in the cluster. Put the proteins into their correct gff file (out of 50 total).
 """
-def remap(gffFile, oldGffs):
+def remap(gffDir, oldGffs):
     newGffs = {}
 
-    # Make a gff file for
-    with open(gffFile, 'r') as gffFile:
-        for line in gffFile:
-            if not line.startswith('#'):
-                line = line.replace("(", "")
-                line = line.replace(")", "")
-                lineSplit = line.split()
-                name = lineSplit[0]
-                # print(name)
-                # print(fileName)
+    for filename in os.listdir(gffDir):
+        # print(filename)
+        if filename.endswith(".gff") or filename.endswith(".gff3"):
+            with open(gffDir + "/" + filename, 'r') as gffFile:
+                for line in gffFile:
+                    if not line.startswith('#'):
+                        line = line.replace("(", "")
+                        line = line.replace(")", "")
+                        lineSplit = line.split()
+                        name = lineSplit[0]
+                        # print(name)
+                        # print(fileName)
 
-                name = name.replace(".faa", ".gff")
-                name = name.rstrip()
-                fileName = "_".join(name.split('_')[2::])
-                # replaced = line.replace(name, protein)  # replaces the representative protein name with the protein of this one in the cluster
-                matchFound = False
-                # print(protein)
-                # print(fileName)
-                basename = os.path.basename(fileName)
-                for genePred in oldGffs[basename]:
-                    genePred[0] = genePred[0].rstrip()
-                    if genePred[0] == name or genePred[1] == name:
-                        # print("Match! name = " + name)
-                        # print("Replaced = " + replaced)
-                        # print("Original name = " + genePred[1])
-                        newLine = changeCoord(genePred[2], line)
-                        newGffs.setdefault(fileName, []).append(newLine)
-                        matchFound = True
-                        break
-                if not matchFound:
-                    print("Match not found for protein: ")
-                    print(name + "|")
+                        name = name.replace(".faa", ".gff")
+                        name = name.rstrip()
+                        fileName = "_".join(name.split('_')[2::])
+                        # replaced = line.replace(name, protein)  # replaces the representative protein name with the protein of this one in the cluster
+                        matchFound = False
+                        # print(protein)
+                        # print(fileName)
+                        basename = os.path.basename(fileName)
+                        for genePred in oldGffs[basename]:
+                            genePred[0] = genePred[0].rstrip()
+                            if genePred[0] == name or genePred[1] == name:
+                                # print("Match! name = " + name)
+                                # print("Replaced = " + replaced)
+                                # print("Original name = " + genePred[1])
+                                newLine = changeCoord(genePred[2], line)
+                                newGffs.setdefault(fileName, []).append(newLine)
+                                matchFound = True
+                                break
+                        if not matchFound:
+                            print("Match not found for protein: ")
+                            print(name + "|")
 
     return newGffs
 
@@ -124,7 +126,7 @@ def writeNewGffs(newGffs, outputDir):
 
 def main():
     print("Parsing args")
-    gffFile, oldGffDir, outputDir = parseArgs()
+    gffDir, oldGffDir, outputDir = parseArgs()
     print("Done parsing args\nReading gff information from original gene prediction files")
     oldGffs = readOldGffs(oldGffDir)
     print("Done reading old gff files")
@@ -136,7 +138,7 @@ def main():
     if not os.path.exists(outputDir):
         os.makedirs(outputDir)
     print("Doing the remapping")
-    newGffs = remap(gffFile, oldGffs)
+    newGffs = remap(gffDir, oldGffs)
     print("Done remapping")
     writeNewGffs(newGffs, outputDir)
 
