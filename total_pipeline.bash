@@ -80,7 +80,6 @@ main() {
 	## Run phobius in parallel and wait for all processes to finish
 	for faa in inputRenamed/*.faa; do
 		FAA_BASENAME=`basename $faa .faa`
-		echo $FAA_BASENAME
 		./run_phobius -i $faa -r $inDir/"$FAA_BASENAME".gff -o tempphobiusout/"$FAA_BASENAME" >> log 2>&1    &
 	done
 	wait
@@ -122,20 +121,20 @@ main() {
 #		genome="$(cut -d'_' -f1 <<< $name)"
 #		awk -F'\t' '{if ( $1 ~ /^>rRNA/) { split($1,array,"_"); split(array[8], coord, "-"); print array[2] "_" array[3] "_" array[4] "_" array[5] "_" array[6] "_" array[7] "\t" "rRNA" "\t" "rRNA" "\t" coord[1] "\t" coord[2] "\t.\t" substr(array[9],4,1) "\t.\t."; }}' $file > temp/"$genome"_scaffolds_cds.gff
 #	done
-	./merge.bash merged_prot temp prot_n_rna > log
+	./merge.bash merged_prot temp prot_n_rna >> log
 	
 	# merge gffs from tools that didn't use proteins
 	# Piler
 	rm -r prot_n_rna_n_piler/
 	mkdir prot_n_rna_n_piler/
-	./merge.bash prot_n_rna pilerout prot_n_rna_n_piler
+	./merge.bash prot_n_rna pilerout prot_n_rna_n_piler >> log
 	
 	
 	# Create fasta files
 	echo "Creating nucleotide and protein fasta files"
 	rm -r final
 	mkdir final
-	./gffToFasta.bash -A prot_n_rna -G $assembledGenome -O final
+	./gffToFasta.bash -A prot_n_rna -G $assembledGenome -O final >> log
 	mv prot_n_rna/* final
 	echo "Done"
 	
