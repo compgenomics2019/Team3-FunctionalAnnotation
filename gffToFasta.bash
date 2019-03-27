@@ -74,7 +74,8 @@ check_files() {
 		outputFile2=${file%.*}
 		outputFile2="$outputFile2.faa"
 		echo "Translating $file"
-		/projects/team3/func_annot/miniconda3/envs/annotation/bin/transeq $file $outputFile2 -frame=1 -trim -sformat pearson
+#		/projects/team3/func_annot/miniconda3/envs/annotation/bin/transeq $file $outputFile2 -frame=1 -trim -sformat pearson
+		transeq $file $outputFile2 -frame=1 -trim -sformat pearson
 		echo "Done"
 	done
 }
