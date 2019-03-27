@@ -73,6 +73,19 @@ main() {
 	
 	# Call tools on unclustered proteins
 	echo "Calling tools on unclustered proteins: Phobius and SignalP"
+	## phobius
+	echo "Start running phobius"
+	rm -r tempphobiusout # clean up
+	mkdir tempphobiusout # creat temp dir
+	## Run phobius in parallel and wait for all processes to finish
+	for faa in inputRenamed/*.faa; do
+		FAA_BASENAME=`basename $faa .faa`
+		echo $FAA_BASENAME
+		./run_phobius -i $faa -r $inDir/"$FAA_BASENAME".gff -o tempphobiusout/"$FAA_BASENAME" >> log 2>&1    &
+	done
+	wait
+	## Now the output should be at "tempphobiusout/<basename>.gff" and "tempphobiusout/<basename>.out"
+	
 	rm -r tempsignalpout
 	./signalpforall.sh -i inputRenamed -o $org >> log
 	
@@ -81,17 +94,7 @@ main() {
 	mkdir signalpRemap
 	python -g tempsignalpout -d inputRenamed -o signalpRemap
 	
-	## phobius
-	echo "Start running phobius"
-	rm -r tempphobiusout # clean up
-	mkdir tempphobiusout # creat temp dir
-	## Run phobius in parallel and wait for all processes to finish
-	for faa in inputRenamed/*.faa; do
-		FAA_BASENAME=`basename $faa .faa`
-		./run_phobius -i $faa -r $inDir/"$FAA_BASENAME".gff -o tempphobiusout/"$FAA_BASENAME" >> log 2>&1    &
-	done
-	wait
-	## Now the output should be at "tempphobiusout/<basename>.gff" and "tempphobiusout/<basename>.out"
+
 
 	echo "Done"
 	
@@ -106,7 +109,7 @@ main() {
 	rm -r merged_prot
 	mkdir merged_prot
 	mergedGff="/projects/team3/func_annot/merged.gff" # TODO change this to the actual merged file
-	python ./remap.py -g $mergedGff -c nr95.clstr -d $inDir -o merged_prot > remap_log
+	python2.7 ./remap.py -g $mergedGff -c nr95.clstr -d $inDir -o merged_prot > remap_log
 	echo "Done"
 	
 #	# merge rRNAs
