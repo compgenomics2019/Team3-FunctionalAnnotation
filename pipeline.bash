@@ -55,16 +55,6 @@ check_files() {
 
 homology() {
 	# Run the homology based tools
-	# InterProScan
-	interproscan.sh -i $prot -o intPro_out -f gff3
-	
-	# SWITCHING TO PYTHON2!
-	alias python=python2.7
-	# eggNOG
-	python emapper.py -i $prot --output eggNOG_temp_out -d bact -m diamond
-	# Reformat egg output
-	python eggNogGff.py -e eggNOG_temp_out -o eggNOG_out
-	
 	# CARD
 	rgi load -i $c --card_annotation $m --local
 	rgi main -i $prot -o card_out --input_type protein --local
@@ -75,6 +65,18 @@ homology() {
 
 	#VFDB - Virulence Factors
 	"$mydir"/vfdbblast.py -i $prot -o vfdb_out
+	
+	# InterProScan
+	interproscan.sh -i $prot -o intPro_out -f gff3
+	
+	# SWITCHING TO PYTHON2!
+	alias python=python2.7
+	# eggNOG
+	python emapper.py -i $prot --output eggNOG_temp_out -d bact -m diamond
+	# Reformat egg output
+	python eggNogGff.py -e eggNOG_temp_out -o eggNOG_out
+	
+
 }
 
 merge() {
