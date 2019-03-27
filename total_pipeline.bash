@@ -75,8 +75,13 @@ main() {
 	echo "Calling tools on unclustered proteins: Phobius and SignalP"
 	rm -r tempsignalpout
 	./signalpforall.sh -i inputRenamed -o $org >> log
-
-    ## phobius
+	
+	# Remap the SignalP output to the original scaffolds
+	rm -r signalpRemap
+	mkdir signalpRemap
+	python -g tempsignalpout -d inputRenamed -o signalpRemap
+	
+	## phobius
 	echo "Start running phobius"
 	rm -r tempphobiusout # clean up
 	mkdir tempphobiusout # creat temp dir
@@ -104,15 +109,15 @@ main() {
 	python ./remap.py -g $mergedGff -c nr95.clstr -d $inDir -o merged_prot > remap_log
 	echo "Done"
 	
-	# merge rRNAs
-	rm -r temp/
-	mkdir temp/
-	for file in $inDir/*_RNA.fna; do
-		genome=${file##*/}
-		name=${genome%.*}
-		genome="$(cut -d'_' -f1 <<< $name)"
-		awk -F'\t' '{if ( $1 ~ /^>rRNA/) { split($1,array,"_"); split(array[8], coord, "-"); print array[2] "_" array[3] "_" array[4] "_" array[5] "_" array[6] "_" array[7] "\t" "rRNA" "\t" "rRNA" "\t" coord[1] "\t" coord[2] "\t.\t" substr(array[9],4,1) "\t.\t."; }}' $file > temp/"$genome"_scaffolds_cds.gff
-	done
+#	# merge rRNAs
+#	rm -r temp/
+#	mkdir temp/
+#	for file in $inDir/*_RNA.fna; do
+#		genome=${file##*/}
+#		name=${genome%.*}
+#		genome="$(cut -d'_' -f1 <<< $name)"
+#		awk -F'\t' '{if ( $1 ~ /^>rRNA/) { split($1,array,"_"); split(array[8], coord, "-"); print array[2] "_" array[3] "_" array[4] "_" array[5] "_" array[6] "_" array[7] "\t" "rRNA" "\t" "rRNA" "\t" coord[1] "\t" coord[2] "\t.\t" substr(array[9],4,1) "\t.\t."; }}' $file > temp/"$genome"_scaffolds_cds.gff
+#	done
 	./merge.bash merged_prot temp prot_n_rna > log
 	
 	# merge gffs from tools that didn't use proteins
