@@ -2,12 +2,11 @@
 
 #Usage statement
 usage () {
-	echo "Usage: rename.bash -c <card.json> -m <card_model> -g <input_gff> -p <input_prot> -o <output_name> -t <org_type>
+	echo "Usage: rename.bash -c <card.json> -m <card_model> -p <input_prot> -o <output_name> -t <org_type>
 	Required Arguments:
 	-c path/to/card.json
 	-m path/to/model
-	-g name of the input gff file that contains predicted genes
-	-p name of the input faa file that contains predicted proteins
+	-p name of the input faa file that clustered proteins
 	-o desired name of the annotated output files. This will included annotated nucleotide, protein, and gff files.
 	-t Type of Organism - Required for SignalP. Archaea: 'arch', Gram-positive: 'gram+', Gram-negative: 'gram-' or Eukarya: 'euk'
 	"
@@ -24,15 +23,13 @@ check_for_help() {
 get_input() {
 	check_for_help "$1"
 	
-	gff=""
 	prot=""
 	out=""
 	c=""
 	m=""
 	org=""
-	while getopts "g:p:o:c:m:t:h" opt; do
+	while getopts "p:o:c:m:t:h" opt; do
 		case $opt in
-		g ) gff=$OPTARG;;
 		p ) prot=$OPTARG;;
 		o ) out=$OPTARG;;
 		c ) c=$OPTARG;;
@@ -49,11 +46,6 @@ get_input() {
 
 check_files() {
 	# Check to see if input files are actual files
-	if [ -z "$gff" ] || [ ! -f "$gff" ]; then
-		echo "A valid gff file must be given. Exiting the program."
-		usage
-		exit 1
-	fi
 	if [ -z "$prot" ] || [ ! -f "$prot" ]; then
 		echo "A valid input faa file must be given. Exiting the program."
 		usage
@@ -110,21 +102,6 @@ homology() {
 	interproscan.sh -i $prot -o intPro_out -f gff3
 }
 
-ab_initio() {
-	# Run the ab initio based tools
-	# Piler
-	pilercr -in $assembledGenome -out temp_piler_out -quiet -noinfo
-	#convert pilercr output to gff file
-	python pilercrtogff.py temp_piler_out piler_out
-	rm temp_piler_out
-	
-	# SignalP
-	# The prefix argument takes in a user input for name of the output file and appends a .gff3 at the end of the specified name.
-	# Here if the prefix is signalpOut, then the gff file obtained would be signalpOut.gff3
-	signalppath=$(which signalp)
-	$signalppath -fasta $prot -org $org -format short -gff3 -prefix signalpOut
-}
-
 merge() {
 	# Merge the output of the all the tools together into a gff file
 	# Concatenate the output files together
@@ -134,7 +111,6 @@ merge() {
 main() {
 	get_input "$@"
 	check_files
-	ab_initio
 	homology
 	merge
 }
