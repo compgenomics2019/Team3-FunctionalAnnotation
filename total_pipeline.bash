@@ -53,7 +53,7 @@ check_for_help() {
 
 main() {
 	get_input "$@"
-	
+	source /projects/home/ggruenhagen3/miniconda3/etc/profile.d/conda.sh	
 	# Rename input
 	echo "Renaming input"
 	rm -r inputRenamed

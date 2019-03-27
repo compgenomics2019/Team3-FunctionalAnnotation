@@ -2,13 +2,11 @@
 
 #Usage statement
 usage () {
-	echo "Usage: rename.bash -c <card.json> -m <card_model> -p <input_prot> -o <output_name> -t <org_type>
+	echo "Usage: rename.bash -c <card.json> -m <card_model> -p <input_prot> -o <output_name> 
 	Required Arguments:
 	-c path/to/card.json
 	-m path/to/model
 	-p name of the input faa file that clustered proteins
-	-o desired name of the annotated output files. This will included annotated nucleotide, protein, and gff files.
-	-t Type of Organism - Required for SignalP. Archaea: 'arch', Gram-positive: 'gram+', Gram-negative: 'gram-' or Eukarya: 'euk'
 	"
 }
 
@@ -24,24 +22,16 @@ get_input() {
 	check_for_help "$1"
 	
 	prot=""
-	out=""
 	c=""
 	m=""
-	org=""
-	while getopts "p:o:c:m:t:h" opt; do
+	while getopts "p:c:m:h" opt; do
 		case $opt in
 		p ) prot=$OPTARG;;
-		o ) out=$OPTARG;;
 		c ) c=$OPTARG;;
 		m ) m=$OPTARG;;
-		t ) org=$OPTARG;;
 		h ) usage; exit 0;
 		esac
 	done
-	
-	outGff="$out.gff"
-	outNucl="$out.fna"
-	outProt="$out.faa"
 }
 
 check_files() {
@@ -105,7 +95,7 @@ homology() {
 merge() {
 	# Merge the output of the all the tools together into a gff file
 	# Concatenate the output files together
-	cat eggNOG_out card_out door2_out vfdb_out intPro_out piler_out signalpOut.gff3 > final_out.gff
+	cat eggNOG_out card_out door2_out vfdb_out intPro_out > final_out.gff
 }
 
 main() {
