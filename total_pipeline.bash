@@ -84,6 +84,7 @@ main() {
 		./run_phobius -i $faa -r $inDir/"$FAA_BASENAME".gff -o tempphobiusout/"$FAA_BASENAME" >> log 2>&1    &
 	done
 	wait
+	echo "...phobius done"
 	## Now the output should be at "tempphobiusout/<basename>.gff" and "tempphobiusout/<basename>.out"
 	
 	rm -r tempsignalpout
