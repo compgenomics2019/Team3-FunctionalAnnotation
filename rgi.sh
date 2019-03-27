@@ -22,3 +22,4 @@ done
 
 rgi load -i $c --card_annotation $m --local
 rgi main -i $i -o $o --input_type $t --local
+python3 convert_rgi.py -m $o
