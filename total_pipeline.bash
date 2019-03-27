@@ -92,7 +92,7 @@ main() {
 	# Remap the SignalP output to the original scaffolds
 	rm -r signalpRemap
 	mkdir signalpRemap
-	python -g tempsignalpout -d inputRenamed -o signalpRemap
+	python remapy_unclust.py -g tempsignalpout -d inputRenamed -o signalpRemap
 	
 	echo "Done"
 	
