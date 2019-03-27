@@ -129,16 +129,19 @@ def remap(cluster, gffFile, oldGffs):
                         # print(protein)
                         # print(fileName)
                         basename = os.path.basename(fileName)
-                        for genePred in oldGffs[basename]:
-                            genePred[0] = genePred[0].rstrip()
-                            if genePred[0] == protein or genePred[1] == protein:
-                                # print("Match! protein = " + protein)
-                                # print("Replaced = " + replaced)
-                                # print("Original name = " + genePred[1])
-                                newLine = changeCoord(genePred[2], replaced)
-                                newGffs.setdefault(fileName, []).append(newLine)
-                                matchFound = True
-                                break
+                        if basename in oldGffs:
+                            for genePred in oldGffs[basename]:
+                                genePred[0] = genePred[0].rstrip()
+                                if genePred[0] == protein or genePred[1] == protein:
+                                    # print("Match! protein = " + protein)
+                                    # print("Replaced = " + replaced)
+                                    # print("Original name = " + genePred[1])
+                                    newLine = changeCoord(genePred[2], replaced)
+                                    newGffs.setdefault(fileName, []).append(newLine)
+                                    matchFound = True
+                                    break
+                        else:
+                            print("Basename not in keys of oldGffs: " + basename)
                         if not matchFound:
                             print("Match not found for protein: ")
                             print(protein + "|")
@@ -167,8 +170,8 @@ def main():
     print("Reading gff information from original gene prediction files")
     oldGffs = readOldGffs(oldGffDir)
     print("Done reading old gff files")
-    for key in oldGffs.keys():
-        print(key)
+    # for key in oldGffs.keys():
+    #     print(key)
     #    for annot in oldGffs[key]:
     #         print(annot[0])
 
