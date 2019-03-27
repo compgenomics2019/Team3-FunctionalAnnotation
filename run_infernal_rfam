@@ -84,7 +84,8 @@ def convert_gff():
 def main():
     parse_arg()
     run_infernal_rfam()
-    convert_gff()
+    # There is no need for gff conversion anymore
+    #convert_gff()
 
 if __name__ == "__main__":
     main()
