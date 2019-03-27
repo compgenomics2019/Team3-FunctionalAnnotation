@@ -130,6 +130,10 @@ def main():
     OUTPUT = args.output
     REFGFF = args.gff
 
+    if not os.path.isfile(PHOBIUS_BIN):
+        print("Error: Phobius not found! Did you run `(cd dependencies; ./prepare_phobius.sh)` in the pipeline directory?")
+        sys.exit()
+
     ## Run phobius program
     run_phobius(INPUT, OUTPUT)
     #convert_gff(OUTPUT)
