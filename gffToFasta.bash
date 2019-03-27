@@ -5,7 +5,7 @@
 
 #Usage statement
 usage () {
-	echo "Usage: rename.bash -A <annotated_dir> -G <genome_dir>
+	echo "Usage: gffToFasta.bash -A <annotated_dir> -G <genome_dir>
 	-A directory of annotated gff files
 	-G directory of genome directories containing scaffolds.fasta
 	-O output directory of annotated fasta files
