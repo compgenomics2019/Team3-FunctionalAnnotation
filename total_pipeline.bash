@@ -81,7 +81,7 @@ main() {
 	rm -r tempphobiusout # clean up
 	mkdir tempphobiusout # creat temp dir
 	## Run phobius in parallel and wait for all processes to finish
-	for faa in inputRenamed/*.faa
+	for faa in inputRenamed/*.faa; do
 		FAA_BASENAME=`basename $faa .faa`
 		./run_phobius -i $faa -r $inDir/"$FAA_BASENAME".gff -o tempphobiusout/"$FAA_BASENAME" >> log 2>&1    &
 	done
