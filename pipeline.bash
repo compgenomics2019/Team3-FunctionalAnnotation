@@ -41,8 +41,13 @@ check_files() {
 		usage
 		exit 1
 	fi
-	if [ -z "$out" ]; then
-		echo "A non-empty string for the output file must be given. Exiting the program."
+	if [ -z "$c" ]; then
+		echo "A non-empty string for card.json path must be given. Exiting the program."
+		usage
+		exit 1
+	fi
+	if [ -z "$m" ]; then
+		echo "A non-empty string for card model path must be given. Exiting the program."
 		usage
 		exit 1
 	fi
