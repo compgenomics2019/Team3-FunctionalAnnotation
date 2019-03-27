@@ -76,13 +76,14 @@ homology() {
 	# CARD
 	rgi load -i $c --card_annotation $m --local
 	rgi main -i $prot -o card_out --input_type protein --local
-	python3 convert_rgi.py -m $o
+	rm *.temp*
+	python3 convert_rgi.py -m card_out
 }
 
 merge() {
 	# Merge the output of the all the tools together into a gff file
 	# Concatenate the output files together
-	cat eggNOG_out card_out door2_out vfdb_out intPro_out > final_out.gff
+	cat eggNOG_out card_out.gff door2_out vfdb_out intPro_out > final_out.gff
 }
 
 main() {
