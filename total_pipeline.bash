@@ -73,20 +73,29 @@ main() {
 	
 	# Call tools on unclustered proteins
 	echo "Calling tools on unclustered proteins: Phobius and SignalP"
-	rm -r tempsignalpout
-	./signalpforall.sh -i inputRenamed -o $org >> log
-
-    ## phobius
+	## phobius
 	echo "Start running phobius"
 	rm -r tempphobiusout # clean up
 	mkdir tempphobiusout # creat temp dir
 	## Run phobius in parallel and wait for all processes to finish
 	for faa in inputRenamed/*.faa; do
 		FAA_BASENAME=`basename $faa .faa`
+		echo $FAA_BASENAME
 		./run_phobius -i $faa -r $inDir/"$FAA_BASENAME".gff -o tempphobiusout/"$FAA_BASENAME" >> log 2>&1    &
 	done
 	wait
+	echo "...phobius done"
 	## Now the output should be at "tempphobiusout/<basename>.gff" and "tempphobiusout/<basename>.out"
+	
+	rm -r tempsignalpout
+	./signalpforall.sh -i inputRenamed -o $org >> log
+	
+	# Remap the SignalP output to the original scaffolds
+	rm -r signalpRemap
+	mkdir signalpRemap
+	python -g tempsignalpout -d inputRenamed -o signalpRemap
+	
+
 
 	echo "Done"
 	
@@ -101,18 +110,18 @@ main() {
 	rm -r merged_prot
 	mkdir merged_prot
 	mergedGff="/projects/team3/func_annot/merged.gff" # TODO change this to the actual merged file
-	python ./remap.py -g $mergedGff -c nr95.clstr -d $inDir -o merged_prot > remap_log
+	python2.7 ./remap.py -g $mergedGff -c nr95.clstr -d $inDir -o merged_prot > remap_log
 	echo "Done"
 	
-	# merge rRNAs
-	rm -r temp/
-	mkdir temp/
-	for file in $inDir/*_RNA.fna; do
-		genome=${file##*/}
-		name=${genome%.*}
-		genome="$(cut -d'_' -f1 <<< $name)"
-		awk -F'\t' '{if ( $1 ~ /^>rRNA/) { split($1,array,"_"); split(array[8], coord, "-"); print array[2] "_" array[3] "_" array[4] "_" array[5] "_" array[6] "_" array[7] "\t" "rRNA" "\t" "rRNA" "\t" coord[1] "\t" coord[2] "\t.\t" substr(array[9],4,1) "\t.\t."; }}' $file > temp/"$genome"_scaffolds_cds.gff
-	done
+#	# merge rRNAs
+#	rm -r temp/
+#	mkdir temp/
+#	for file in $inDir/*_RNA.fna; do
+#		genome=${file##*/}
+#		name=${genome%.*}
+#		genome="$(cut -d'_' -f1 <<< $name)"
+#		awk -F'\t' '{if ( $1 ~ /^>rRNA/) { split($1,array,"_"); split(array[8], coord, "-"); print array[2] "_" array[3] "_" array[4] "_" array[5] "_" array[6] "_" array[7] "\t" "rRNA" "\t" "rRNA" "\t" coord[1] "\t" coord[2] "\t.\t" substr(array[9],4,1) "\t.\t."; }}' $file > temp/"$genome"_scaffolds_cds.gff
+#	done
 	./merge.bash merged_prot temp prot_n_rna > log
 	
 	# merge gffs from tools that didn't use proteins
