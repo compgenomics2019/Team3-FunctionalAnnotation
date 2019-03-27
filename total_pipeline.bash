@@ -143,7 +143,7 @@ main() {
 	./gffToFasta.bash -A all_merge/ -G $assembledGenome -O final >> log
 	mv all_merge/* final
 	echo "Done"
-	conda deactivate
+	# conda deactivate
 	
 	# remove temporary files
 }
