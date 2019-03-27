@@ -59,9 +59,9 @@ homology() {
 	# SWITCHING TO PYTHON2!
 	eggScript="$(which emapper.py)"
 	# eggNOG
-        python2 $eggScript -i $prot --output eggNOG_temp_out -d bact -m diamond
-        # Reformat egg output
-        python eggNogGff.py -e eggNOG_temp_out.annotations -o eggNOG_out
+	python2 $eggScript -i $prot --output eggNOG_temp_out -d bact -m diamond
+	# Reformat egg output
+	python2 eggNogGff.py -e eggNOG_temp_out.annotations -o eggNOG_out
 	
 	#Door2 - Operon Prediction
 	mydir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
@@ -71,7 +71,8 @@ homology() {
 	"$mydir"/vfdbblast.py -i $prot -o vfdb_out
 	
 	# InterProScan
-	interproscan.sh -i $prot -o intPro_out -f gff3
+	interproscan.sh -i $prot
+	# output will be called $prot.gff3
 	
 	# CARD
 	rgi load -i $c --card_annotation $m --local
@@ -83,7 +84,7 @@ homology() {
 merge() {
 	# Merge the output of the all the tools together into a gff file
 	# Concatenate the output files together
-	cat eggNOG_out card_out.gff door2_out vfdb_out intPro_out > final_out.gff
+	cat eggNOG_out card_out.gff door2_out vfdb_out nr95.gff3 > final_out.gff
 }
 
 main() {
