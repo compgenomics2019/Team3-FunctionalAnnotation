@@ -95,7 +95,7 @@ for line3 in n_fl:
 
 with open(vs,'r')as test:
 	data = test.read().strip().split('\n')
-	final_output = open(final_out,'w')
+	final_output = open(final_output,'w')
 	source = "Door2"
 	feature = "operon"
 	strand = "."

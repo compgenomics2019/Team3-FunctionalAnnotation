@@ -76,6 +76,7 @@ homology() {
 	# CARD
 	rgi load -i $c --card_annotation $m --local
 	rgi main -i $prot -o card_out --input_type protein --local
+	python3 convert_rgi.py -m $o
 }
 
 merge() {
