@@ -57,7 +57,7 @@ homology() {
 	# Run the homology based tools
 	
 	# CARD
-	conda activate function_annotation
+	# conda activate function_annotation
 	
 	rgi load -i $c --card_annotation $m --local
 	rgi main -i $prot -o card_out --input_type protein --local
@@ -69,7 +69,7 @@ homology() {
 	#VFDB - Virulence Factors
 	"$mydir"/vfdbblast.py -i $prot -o vfdb_out
 
-	conda deactivate
+	# conda deactivate
 	
 	# InterProScan
 	interproscan.sh -i $prot -o intPro_out -f gff3
