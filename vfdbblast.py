@@ -24,7 +24,7 @@ blast_output = os.path.join(DIR,'vfdb/temp/inter_output.txt')
 subprocess.run(['mkdir {}'.format(temp_folder)], shell=True, check = True)
 subprocess.run(['cp {} {}'.format(db_file,temp_folder)], shell=True, check=True)
 subprocess.run(['makeblastdb -in {} -dbtype prot'.format(temp_folder+'VFDB_setB_pro.fas')], shell=True, check = True)
-subprocess.run(['blastp -query {} -db {} -out {} -evalue 1e-10 -outfmt "6 qseqid qstart qend qlen length qcovs pident evalue stitle" -qcov_hsp_perc 90 -max_target_seqs 1 -max_hsps 1'.format(input_file, temp_folder+'final.table', blast_output)], shell=True,check=True)
+subprocess.run(['blastp -query {} -db {} -out {} -evalue 1e-10 -outfmt "6 qseqid qstart qend qlen length qcovs pident evalue stitle" -qcov_hsp_perc 90 -max_target_seqs 1 -max_hsps 1'.format(input_file, temp_folder+'VFDB_setB_pro.fas', blast_output)], shell=True,check=True)
 
 # parse and filter blast outputs
 bls = open(blast_output,'r')
