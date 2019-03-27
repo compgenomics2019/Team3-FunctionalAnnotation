@@ -94,7 +94,7 @@ def remap(gffDir, oldGffs):
                         # print(name)
                         # print(fileName)
 
-                        name = name.replace(".faa", ".gff3")
+                        name = name.replace(".faa", ".gff")
                         name = name.rstrip()
                         fileName = "_".join(name.split('_')[2::])
                         # replaced = line.replace(name, protein)  # replaces the representative protein name with the protein of this one in the cluster
@@ -102,16 +102,19 @@ def remap(gffDir, oldGffs):
                         # print(protein)
                         # print(fileName)
                         basename = os.path.basename(fileName)
-                        for genePred in oldGffs[basename]:
-                            genePred[0] = genePred[0].rstrip()
-                            if genePred[0] == name or genePred[1] == name:
-                                # print("Match! name = " + name)
-                                # print("Replaced = " + replaced)
-                                # print("Original name = " + genePred[1])
-                                newLine = changeCoord(genePred[2], line)
-                                newGffs.setdefault(fileName, []).append(newLine)
-                                matchFound = True
-                                break
+                        if basename in oldGffs:
+                            for genePred in oldGffs[basename]:
+                                genePred[0] = genePred[0].rstrip()
+                                if genePred[0] == name or genePred[1] == name:
+                                    # print("Match! name = " + name)
+                                    # print("Replaced = " + replaced)
+                                    # print("Original name = " + genePred[1])
+                                    newLine = changeCoord(genePred[2], line)
+                                    newGffs.setdefault(fileName, []).append(newLine)
+                                    matchFound = True
+                                    break
+                        else:
+                            print("Key not found: " + basename)
                         if not matchFound:
                             print("Match not found for protein: ")
                             print(name + "|")
@@ -130,8 +133,8 @@ def main():
     print("Done parsing args\nReading gff information from original gene prediction files")
     oldGffs = readOldGffs(oldGffDir)
     print("Done reading old gff files")
-    for key in oldGffs.keys():
-        print(key)
+    # for key in oldGffs.keys():
+    #     print(key)
     #    for annot in oldGffs[key]:
     #         print(annot[0])
 
