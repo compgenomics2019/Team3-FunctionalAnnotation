@@ -140,8 +140,8 @@ main() {
 	echo "Creating nucleotide and protein fasta files"
 	rm -r final
 	mkdir final
-	./gffToFasta.bash -A prot_n_rna -G $assembledGenome -O final >> log
-	mv prot_n_rna/* final
+	./gffToFasta.bash -A all_merge/ -G $assembledGenome -O final >> log
+	mv all_merge/* final
 	echo "Done"
 	conda deactivate
 	
