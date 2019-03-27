@@ -3,7 +3,7 @@
 import argparse
 import re
 pars=argparse.ArgumentParser()
-pars.add_argument('-m',help="fuck",required=True,type=str)
+pars.add_argument('-m',help="test",required=True,type=str)
 args=pars.parse_args()
 temp_file=args.m
 def rgi_2_gff(temp_file):
