@@ -79,7 +79,7 @@ main() {
 	# Remap the SignalP output to the original scaffolds
 	rm -r signalpRemap
 	mkdir signalpRemap
-	python remap_unclust.py -g tempsignalpout -d inputRenamed -o signalpRemap
+	python2.7 remap_unclust.py -g tempsignalpout -d $inDir -o signalpRemap >> log
 	
 	## phobius
 	echo "Start running phobius"
@@ -106,7 +106,7 @@ main() {
 	rm -r merged_prot
 	mkdir merged_prot
 	mergedGff="/projects/team3/func_annot/merged.gff" # TODO change this to the actual merged file
-	python2.7 ./remap.py -g $mergedGff -c nr95.clstr -d $inDir -o merged_prot > remap_log
+	python2.7 ./remap.py -g $mergedGff -c nr95.clstr -d $inDir -o merged_prot >> log
 	echo "Done"
 	
 #	# merge rRNAs
