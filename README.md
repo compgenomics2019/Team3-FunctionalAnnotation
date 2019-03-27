@@ -63,9 +63,7 @@ For all the tools below add the exectuables to your PATH environment variable.
   To download the Rfam database, use the `dependencies/prepare_Rfam.sh` script.
 
   ```
-  cd dependencies
-  ./prepare_Rfam.sh
-  cd ..
+  (cd dependencies; ./prepare_Rfam.sh)
   ```
 
 - InterProScan
