@@ -28,7 +28,7 @@ Create and activate a conda environment using the yml file provided:
 #Create environment after downloading yml file
 conda-env create -f function_annotation.yml
 
-#To acativate the conda environment:
+#To activate the conda environment:
 conda activate function_annotation
 ```
 For all the tools below add the exectuables to your PATH environment variable.
