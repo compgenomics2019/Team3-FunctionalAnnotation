@@ -46,21 +46,6 @@ check_files() {
 		usage
 		exit 1
 	fi
-	
-	# Check to see if the input files have the correct extensions
-	gffExtension="${gff##*.}"
-	protExtension="${prot##*.}"
-	if [ "$gffExtension" != "gff" ] && [ "$gff" != "gff3" ]; then
-		echo "The input gff file does not have a gff or gff3 extension. Exiting the program."
-		usage
-		exit 1
-	fi
-	if [ "$protExtension" != "faa" ] && [ "$protExtension" != "fasta" ] && [ "$protExtension" != "fa" ]; then
-		echo "The input protein sequences do not have a faa, fasta, nor fa file extension. Exiting the program."
-		usage
-		exit 1
-	fi
-	
 }
 
 homology() {
