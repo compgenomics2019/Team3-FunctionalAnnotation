@@ -81,7 +81,6 @@ main() {
 	for faa in inputRenamed/*.faa; do
 		FAA_BASENAME=`basename $faa .faa`
 		echo $FAA_BASENAME
-		cd ./dependencies/
 		./run_phobius -i $faa -r $inDir/"$FAA_BASENAME".gff -o tempphobiusout/"$FAA_BASENAME" >> log 2>&1    &
 	done
 	wait
