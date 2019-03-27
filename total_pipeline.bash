@@ -131,12 +131,14 @@ main() {
 	
 	
 	# Create fasta files
+	conda activate function_annotation
 	echo "Creating nucleotide and protein fasta files"
 	rm -r final
 	mkdir final
 	./gffToFasta.bash -A prot_n_rna -G $assembledGenome -O final >> log
 	mv prot_n_rna/* final
 	echo "Done"
+	conda deactivate
 	
 	# remove temporary files
 }
