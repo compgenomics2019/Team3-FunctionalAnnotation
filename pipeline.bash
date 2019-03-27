@@ -55,16 +55,6 @@ check_files() {
 
 homology() {
 	# Run the homology based tools
-	
-	#Door2 - Operon Prediction
-	mydir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-	"$mydir"/door2blast.py -i $prot -o door2_out
-
-	#VFDB - Virulence Factors
-	"$mydir"/vfdbblast.py -i $prot -o vfdb_out
-
-	# conda deactivate
-	
 	# InterProScan
 	interproscan.sh -i $prot -o intPro_out -f gff3
 	
@@ -76,9 +66,15 @@ homology() {
 	python eggNogGff.py -e eggNOG_temp_out -o eggNOG_out
 	
 	# CARD
-	# conda activate function_annotation
 	rgi load -i $c --card_annotation $m --local
 	rgi main -i $prot -o card_out --input_type protein --local
+	
+	#Door2 - Operon Prediction
+	mydir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+	"$mydir"/door2blast.py -i $prot -o door2_out
+
+	#VFDB - Virulence Factors
+	"$mydir"/vfdbblast.py -i $prot -o vfdb_out
 }
 
 merge() {
