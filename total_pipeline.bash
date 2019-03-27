@@ -53,7 +53,7 @@ check_for_help() {
 
 main() {
 	get_input "$@"
-	source /projects/home/ggruenhagen3/miniconda3/etc/profile.d/conda.sh	
+	# source /projects/home/ggruenhagen3/miniconda3/etc/profile.d/conda.sh	
 	# Rename input
 	echo "Renaming input"
 	rm -r inputRenamed
@@ -133,10 +133,10 @@ main() {
 	# Piler
 	rm -r all_merge/
 	mkdir all_merge/
-	./merge.bash prot_n_phob_n_signal pilerout all_merge >> log
+	./merge3.bash prot_n_phob_n_signal pilerout all_merge >> log
 	
 	# Create fasta files
-	conda activate function_annotation
+	# conda activate function_annotation
 	echo "Creating nucleotide and protein fasta files"
 	rm -r final
 	mkdir final
