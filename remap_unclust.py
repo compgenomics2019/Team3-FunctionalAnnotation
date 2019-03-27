@@ -130,8 +130,8 @@ def main():
     print("Done parsing args\nReading gff information from original gene prediction files")
     oldGffs = readOldGffs(oldGffDir)
     print("Done reading old gff files")
-    # for key in oldGffs.keys():
-    #     print(key)
+    for key in oldGffs.keys():
+        print(key)
     #    for annot in oldGffs[key]:
     #         print(annot[0])
 
