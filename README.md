@@ -90,9 +90,7 @@ For all the tools below add the exectuables to your PATH environment variable.
   To download the phobius program, use the `dependencies/prepare_phobius.sh` script
 
   ```
-  cd dependencies
-  ./prepare_phobius.sh
-  cd ..
+  (cd dependencies; ./prepare_phobius.sh)
   ```
   
 - CARD: 
