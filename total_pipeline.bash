@@ -94,8 +94,6 @@ main() {
 	mkdir signalpRemap
 	python -g tempsignalpout -d inputRenamed -o signalpRemap
 	
-
-
 	echo "Done"
 	
 	# Call tools on assembledGenome
@@ -121,14 +119,22 @@ main() {
 #		genome="$(cut -d'_' -f1 <<< $name)"
 #		awk -F'\t' '{if ( $1 ~ /^>rRNA/) { split($1,array,"_"); split(array[8], coord, "-"); print array[2] "_" array[3] "_" array[4] "_" array[5] "_" array[6] "_" array[7] "\t" "rRNA" "\t" "rRNA" "\t" coord[1] "\t" coord[2] "\t.\t" substr(array[9],4,1) "\t.\t."; }}' $file > temp/"$genome"_scaffolds_cds.gff
 #	done
-	./merge.bash merged_prot temp prot_n_rna >> log
 	
 	# merge gffs from tools that didn't use proteins
-	# Piler
-	rm -r prot_n_rna_n_piler/
-	mkdir prot_n_rna_n_piler/
-	./merge.bash prot_n_rna pilerout prot_n_rna_n_piler >> log
+	#Phobius
+	rm -r prot_n_phob/
+	mkdir prot_n_phob/
+	./merge.bash merged_prot tempphobiusout prot_n_phob >> log
+	# SignalP
+	rm -r prot_n_phob_n_signal/
+	mkdir prot_n_phob_n_signal/
+	./merge.bash prot_n_phob signalpRemap prot_n_phob_n_signal >> log
 	
+	./rename_to_gff3.bash prot_n_phob_n_signal
+	# Piler
+	rm -r all_merge/
+	mkdir all_merge/
+	./merge.bash prot_n_phob_n_signal pilerout all_merge >> log
 	
 	# Create fasta files
 	conda activate function_annotation
