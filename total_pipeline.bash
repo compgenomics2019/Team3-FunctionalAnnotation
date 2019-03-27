@@ -77,16 +77,16 @@ main() {
 	./signalpforall.sh -i inputRenamed -o $org >> log
 
     ## phobius
-	  echo "Start running phobius"
-    rm -r tempphobiusout # clean up
-    mkdir tempphobiusout # creat temp dir
-    ## Run phobius in parallel and wait for all processes to finish
-    for faa in inputRenamed/*.faa
-      FAA_BASENAME=`basename $faa .faa`
-      ./run_phobius -i $faa -r $inDir/"$FAA_BASENAME".gff -o tempphobiusout/"$FAA_BASENAME" >> log 2>&1    &
-    done
-    wait
-    ## Now the output should be at "tempphobiusout/<basename>.gff" and "tempphobiusout/<basename>.out"
+	echo "Start running phobius"
+	rm -r tempphobiusout # clean up
+	mkdir tempphobiusout # creat temp dir
+	## Run phobius in parallel and wait for all processes to finish
+	for faa in inputRenamed/*.faa
+		FAA_BASENAME=`basename $faa .faa`
+		./run_phobius -i $faa -r $inDir/"$FAA_BASENAME".gff -o tempphobiusout/"$FAA_BASENAME" >> log 2>&1    &
+	done
+	wait
+	## Now the output should be at "tempphobiusout/<basename>.gff" and "tempphobiusout/<basename>.out"
 
 	echo "Done"
 	
