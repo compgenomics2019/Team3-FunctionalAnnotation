@@ -1,4 +1,5 @@
 #!/bin/bash
+# Merge gff files
 folder1=$1
 folder2=$2
 output=$3
