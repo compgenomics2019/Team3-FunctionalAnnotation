@@ -1,5 +1,5 @@
 #!/bin/bash
-shopt -s expand_aliases
+# Run homology based tools
 
 #Usage statement
 usage () {
