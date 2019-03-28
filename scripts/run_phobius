@@ -8,7 +8,7 @@ import argparse
 import subprocess
 
 DIR              = os.path.dirname(__file__)
-PHOBIUS_BIN      = os.path.join(DIR, 'dependencies/phobius/phobius.pl')
+PHOBIUS_BIN      = os.path.join(DIR, '../dependencies/phobius/phobius.pl')
 
 def run_phobius(INPUT, OUTPUT):
     results = subprocess.check_output([PHOBIUS_BIN, '-short', INPUT])
