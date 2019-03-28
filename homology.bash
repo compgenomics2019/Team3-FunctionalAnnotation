@@ -68,7 +68,7 @@ homology() {
 	rgi load -i $c --card_annotation $m --local
 	rgi main -i $prot -o card_out --input_type protein --local
 	rm *.temp*
-	python3 ./scripts/convert_rgi.py -m card_out
+	python3 "$mydir"/scripts/convert_rgi.py -m card_out
 	
 	# InterProScan
 	interproscan.sh -i $prot
@@ -79,7 +79,7 @@ homology() {
 	eggScript="$(which emapper.py)"
 	python2 $eggScript -i $prot --output eggNOG_temp_out -d bact -m diamond > eggLog
 	# Reformat egg output
-	python2 ./scripts/eggNogGff.py -e eggNOG_temp_out.emapper.annotations -o eggNOG_out >> eggLog
+	python2 "$mydir"/scripts/eggNogGff.py -e eggNOG_temp_out.emapper.annotations -o eggNOG_out >> eggLog
 	
 }
 
