@@ -53,6 +53,16 @@ check_files() {
 		exit 1
 	fi
 }
+clean_int_pro() {
+	rm intProTemp
+	cat "" > intProTemp
+	while read p; do
+		if [ "$p" == "##FASTA" ]
+			break
+		fi
+		echo "$p" >> intProTemp
+	done < $prot.gff3
+}
 
 homology() {
 	# Run the homology based tools
@@ -73,6 +83,7 @@ homology() {
 	# InterProScan
 	interproscan.sh -i $prot
 	# output will be called $prot.gff3
+	clean_int_pro
 	rm "$prot.xml"
 	
 	# eggNOG
@@ -86,7 +97,7 @@ homology() {
 merge() {
 	# Merge the output of the all the tools together into a gff file
 	# Concatenate the output files together
-	cat eggNOG_out card_out.gff door2_out vfdb_out nr95.gff3 > final_out.gff
+	cat eggNOG_out card_out.gff door2_out vfdb_out intProTemp > final_out.gff
 }
 
 main() {
