@@ -56,9 +56,13 @@ check_files() {
 
 homology() {
 	# Run the homology based tools
-	# SWITCHING TO PYTHON2!
-	eggScript="$(which emapper.py)"
+	# InterProScan
+	interproscan.sh -i $prot
+	# output will be called $prot.gff3
+	rm "$prot.xml"
+	
 	# eggNOG
+	eggScript="$(which emapper.py)"
 	python2 $eggScript -i $prot --output eggNOG_temp_out -d bact -m diamond > eggLog
 	# Reformat egg output
 	python2 eggNogGff.py -e eggNOG_temp_out.emapper.annotations -o eggNOG_out >> eggLog
@@ -70,9 +74,6 @@ homology() {
 	#VFDB - Virulence Factors
 	"$mydir"/vfdbblast.py -i $prot -o vfdb_out
 	
-	# InterProScan
-	interproscan.sh -i $prot
-	# output will be called $prot.gff3
 	
 	# CARD
 	rgi load -i $c --card_annotation $m --local
