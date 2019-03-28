@@ -69,6 +69,7 @@ main() {
 	
 	echo "Calling tools on clustered proteins: eggNOG, InterProScan, CARD"
 	# Call tools on clust_prot.faa
+	"$mydir"/homology.bash -c $c -m $m -p nr95
 	# output should be called merged.gff
 	echo "Done"
 	
@@ -106,19 +107,8 @@ main() {
 	# remap clustered proteins to gff files
 	rm -r merged_prot
 	mkdir merged_prot
-	mergedGff="/projects/team3/func_annot/merged.gff" # TODO change this to the actual merged file
-	python2.7 "$mydir"/scripts/remap.py -g $mergedGff -c nr95.clstr -d $inDir -o merged_prot >> log
+	python2.7 "$mydir"/scripts/remap.py -g merged.gff -c nr95.clstr -d $inDir -o merged_prot >> log
 	echo "Done"
-	
-#	# merge rRNAs
-#	rm -r temp/
-#	mkdir temp/
-#	for file in $inDir/*_RNA.fna; do
-#		genome=${file##*/}
-#		name=${genome%.*}
-#		genome="$(cut -d'_' -f1 <<< $name)"
-#		awk -F'\t' '{if ( $1 ~ /^>rRNA/) { split($1,array,"_"); split(array[8], coord, "-"); print array[2] "_" array[3] "_" array[4] "_" array[5] "_" array[6] "_" array[7] "\t" "rRNA" "\t" "rRNA" "\t" coord[1] "\t" coord[2] "\t.\t" substr(array[9],4,1) "\t.\t."; }}' $file > temp/"$genome"_scaffolds_cds.gff
-#	done
 	
 	# merge gffs from tools that didn't use proteins
 	#Phobius
