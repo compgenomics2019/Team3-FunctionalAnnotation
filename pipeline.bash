@@ -59,9 +59,9 @@ homology() {
 	# SWITCHING TO PYTHON2!
 	eggScript="$(which emapper.py)"
 	# eggNOG
-	python2 $eggScript -i $prot --output eggNOG_temp_out -d bact -m diamond
+	python2 $eggScript -i $prot --output eggNOG_temp_out -d bact -m diamond > eggLog
 	# Reformat egg output
-	python2 eggNogGff.py -e eggNOG_temp_out.annotations -o eggNOG_out
+	python2 eggNogGff.py -e eggNOG_temp_out.emapper.annotations -o eggNOG_out >> eggLog
 	
 	#Door2 - Operon Prediction
 	mydir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
