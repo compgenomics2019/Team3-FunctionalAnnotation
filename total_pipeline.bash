@@ -55,15 +55,16 @@ main() {
 	get_input "$@"
 	# source /projects/home/ggruenhagen3/miniconda3/etc/profile.d/conda.sh	
 	# Rename input
+	mydir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 	echo "Renaming input"
 	rm -r inputRenamed
 	mkdir inputRenamed
-	./scripts/rename.bash -D $inDir -O inputRenamed > log
+	"$mydir"/scripts/rename.bash -D $inDir -O inputRenamed > log
 	echo "Done"
 	
 	# Cluster
 	echo "Clustering"
-	./scripts/cluster.bash -I inputRenamed >> log
+	"$mydir"/scripts/cluster.bash -I inputRenamed >> log
 	echo "Done"
 	
 	echo "Calling tools on clustered proteins: eggNOG, InterProScan, CARD"
@@ -74,12 +75,12 @@ main() {
 	# Call tools on unclustered proteins
 	echo "Calling tools on unclustered proteins: Phobius and SignalP"
 	rm -r tempsignalpout
-	./scripts/signalpforall.sh -i inputRenamed -o $org >> log
+	"$mydir"/scripts/signalpforall.sh -i inputRenamed -o $org >> log
 	
 	# Remap the SignalP output to the original scaffolds
 	rm -r signalpRemap
 	mkdir signalpRemap
-	python2.7 ./scripts/remap_unclust.py -g tempsignalpout -d $inDir -o signalpRemap >> log
+	python2.7 "$mydir"/scripts/remap_unclust.py -g tempsignalpout -d $inDir -o signalpRemap >> log
 	
 	## phobius
 	echo "Start running phobius"
@@ -88,7 +89,7 @@ main() {
 	## Run phobius in parallel and wait for all processes to finish
 	for faa in inputRenamed/*.faa; do
 		FAA_BASENAME=`basename $faa .faa`
-		./scripts/run_phobius -i $faa -r $inDir/"$FAA_BASENAME".gff -o tempphobiusout/"$FAA_BASENAME" >> log 2>&1    &
+		"$mydir"/scripts/run_phobius -i $faa -r $inDir/"$FAA_BASENAME".gff -o tempphobiusout/"$FAA_BASENAME" >> log 2>&1    &
 	done
 	wait
 	echo "...phobius done"
@@ -98,7 +99,7 @@ main() {
 	# Call tools on assembledGenome
 	echo "Calling tools on assembled genomes: Piler"
 	rm -r pilerout
-	./scripts/pilerforall.sh -i $assembledGenome >> log
+	"$mydir"/scripts/pilerforall.sh -i $assembledGenome >> log
 	echo "Done"
 	
 	echo "Mapping clustered annotations to the whole cluster. Mapping coordinates back to scaffold coordinates. Mapping files back into 50 files."
@@ -106,7 +107,7 @@ main() {
 	rm -r merged_prot
 	mkdir merged_prot
 	mergedGff="/projects/team3/func_annot/merged.gff" # TODO change this to the actual merged file
-	python2.7 ./scripts/remap.py -g $mergedGff -c nr95.clstr -d $inDir -o merged_prot >> log
+	python2.7 "$mydir"/scripts/remap.py -g $mergedGff -c nr95.clstr -d $inDir -o merged_prot >> log
 	echo "Done"
 	
 #	# merge rRNAs
@@ -123,24 +124,24 @@ main() {
 	#Phobius
 	rm -r prot_n_phob/
 	mkdir prot_n_phob/
-	./scripts/merge.bash merged_prot tempphobiusout prot_n_phob >> log
+	"$mydir"/scripts/merge.bash merged_prot tempphobiusout prot_n_phob >> log
 	# SignalP
 	rm -r prot_n_phob_n_signal/
 	mkdir prot_n_phob_n_signal/
-	./scripts/merge.bash prot_n_phob signalpRemap prot_n_phob_n_signal >> log
+	"$mydir"/scripts/merge.bash prot_n_phob signalpRemap prot_n_phob_n_signal >> log
 	
-	./rename_to_gff3.bash prot_n_phob_n_signal
+	"$mydir"/rename_to_gff3.bash prot_n_phob_n_signal
 	# Piler
 	rm -r all_merge/
 	mkdir all_merge/
-	./scripts/merge3.bash prot_n_phob_n_signal pilerout all_merge >> log
+	"$mydir"/scripts/merge3.bash prot_n_phob_n_signal pilerout all_merge >> log
 	
 	# Create fasta files
 	# conda activate function_annotation
 	echo "Creating nucleotide and protein fasta files"
 	rm -r final
 	mkdir final
-	./scripts/gffToFasta.bash -A all_merge/ -G $assembledGenome -O final >> log
+	"$mydir"/scripts/gffToFasta.bash -A all_merge/ -G $assembledGenome -O final >> log
 	mv all_merge/* final
 	echo "Done"
 	# conda deactivate
