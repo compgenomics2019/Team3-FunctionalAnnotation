@@ -56,17 +56,6 @@ check_files() {
 
 homology() {
 	# Run the homology based tools
-	# InterProScan
-	interproscan.sh -i $prot
-	# output will be called $prot.gff3
-	rm "$prot.xml"
-	
-	# eggNOG
-	eggScript="$(which emapper.py)"
-	python2 $eggScript -i $prot --output eggNOG_temp_out -d bact -m diamond > eggLog
-	# Reformat egg output
-	python2 ./scripts/eggNogGff.py -e eggNOG_temp_out.emapper.annotations -o eggNOG_out >> eggLog
-	
 	#Door2 - Operon Prediction
 	#mydir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 	./scripts/door2blast.py -i $prot -o door2_out
@@ -80,6 +69,18 @@ homology() {
 	rgi main -i $prot -o card_out --input_type protein --local
 	rm *.temp*
 	python3 ./scripts/convert_rgi.py -m card_out
+	
+	# InterProScan
+	interproscan.sh -i $prot
+	# output will be called $prot.gff3
+	rm "$prot.xml"
+	
+	# eggNOG
+	eggScript="$(which emapper.py)"
+	python2 $eggScript -i $prot --output eggNOG_temp_out -d bact -m diamond > eggLog
+	# Reformat egg output
+	python2 ./scripts/eggNogGff.py -e eggNOG_temp_out.emapper.annotations -o eggNOG_out >> eggLog
+	
 }
 
 merge() {
