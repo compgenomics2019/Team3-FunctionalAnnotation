@@ -3,7 +3,7 @@ shopt -s expand_aliases
 
 #Usage statement
 usage () {
-	echo "Usage: rename.bash -c <card.json> -m <card_model> -p <input_prot>
+	echo "Usage: homology.bash -c <card.json> -m <card_model> -p <input_prot>
 	Required Arguments:
 	-c path/to/card.json
 	-m path/to/model
