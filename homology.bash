@@ -87,6 +87,7 @@ homology() {
 	rm "$prot.xml"
 	
 	# eggNOG
+	rm eggNOG_temp_*
 	eggScript="$(which emapper.py)"
 	python2 $eggScript -i $prot --output eggNOG_temp_out -d bact -m diamond > eggLog
 	# Reformat egg output
