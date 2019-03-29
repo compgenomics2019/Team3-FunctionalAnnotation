@@ -57,7 +57,7 @@ clean_int_pro() {
 	rm intProTemp
 	cat "" > intProTemp
 	while read p; do
-		if [ "$p" == "##FASTA" ]
+		if [ "$p" == "##FASTA" ]; then
 			break
 		fi
 		echo "$p" >> intProTemp
