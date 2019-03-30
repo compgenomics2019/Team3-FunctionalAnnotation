@@ -68,9 +68,11 @@ homology() {
 	# Run the homology based tools
 	#Door2 - Operon Prediction
 	mydir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+	if [ -d "$mydir"/scripts/door2db/temp ]; then rm -r "$mydir"/scripts/door2db/temp; fi
 	"$mydir"/scripts/door2blast.py -i $prot -o door2_out
 
 	#VFDB - Virulence Factors
+	if [ -d "$mydir"/scripts/vfdb/temp ]; then rm -r "$mydir"/scripts/vfdb/temp; fi
 	"$mydir"/scripts/vfdbblast.py -i $prot -o vfdb_out
 	
 	
