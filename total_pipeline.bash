@@ -67,12 +67,6 @@ main() {
 	"$mydir"/scripts/cluster.bash -I inputRenamed >> log
 	echo "Done"
 	
-	echo "Calling tools on clustered proteins: eggNOG, InterProScan, CARD"
-	# Call tools on clust_prot.faa
-	"$mydir"/homology.bash -c $c -m $m -p nr95
-	# output should be called merged.gff
-	echo "Done"
-	
 	# Call tools on unclustered proteins
 	echo "Calling tools on unclustered proteins: Phobius and SignalP"
 	rm -r tempsignalpout
@@ -101,6 +95,12 @@ main() {
 	echo "Calling tools on assembled genomes: Piler"
 	rm -r pilerout
 	"$mydir"/scripts/pilerforall.sh -i $assembledGenome >> log
+	echo "Done"
+	
+	echo "Calling tools on clustered proteins: eggNOG, InterProScan, CARD"
+	# Call tools on clust_prot.faa
+	"$mydir"/homology.bash -c $c -m $m -p nr95 >> log
+	# output should be called merged.gff
 	echo "Done"
 	
 	echo "Mapping clustered annotations to the whole cluster. Mapping coordinates back to scaffold coordinates. Mapping files back into 50 files."
